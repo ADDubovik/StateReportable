@@ -3,6 +3,7 @@
 #include "State.h"
 
 #include <thread>
+#include <memory>
 
 
 using namespace std::string_literals;
@@ -118,6 +119,137 @@ TEST(StateReportableTest, Test_03)
   EXPECT_GT(stream.str().length(), static_cast<size_t>(180));
 
   std::cout << stream.str();
+}
+
+
+TEST(StateTest, Test_04)
+{
+  std::unique_ptr<ReportLine> line;
+  
+  {
+    State<Namespace_01::State, std::chrono::milliseconds>
+    state(Namespace_01::State::non_inintialized, [&line](auto &&l) { line = std::make_unique<ReportLine>(l); });
+
+    EXPECT_FALSE(line);
+
+    std::this_thread::sleep_for(std::chrono::milliseconds(5));
+    EXPECT_NO_THROW(state = Namespace_01::State::connecting);
+    EXPECT_TRUE(line);
+    // Compiler-specific?
+    EXPECT_NE(line->typeName.find("Namespace_01::State"), std::string::npos);
+    EXPECT_EQ(line->stateFrom, "non_inintialized");
+    EXPECT_EQ(line->stateTo, "connecting");
+    EXPECT_GE(line->duration, 4);
+
+    line.reset();
+
+    std::this_thread::sleep_for(std::chrono::milliseconds(10));
+    EXPECT_NO_THROW(state = Namespace_01::State::connected);
+    EXPECT_TRUE(line);
+    // Compiler-specific?
+    EXPECT_NE(line->typeName.find("Namespace_01::State"), std::string::npos);
+    EXPECT_EQ(line->stateFrom, "connecting");
+    EXPECT_EQ(line->stateTo, "connected");
+    EXPECT_GE(line->duration, 9);
+
+    line.reset();
+
+    std::this_thread::sleep_for(std::chrono::milliseconds(15));
+    EXPECT_NO_THROW(state = Namespace_01::State::error);
+    EXPECT_TRUE(line);
+    // Compiler-specific?
+    EXPECT_NE(line->typeName.find("Namespace_01::State"), std::string::npos);
+    EXPECT_EQ(line->stateFrom, "connected");
+    EXPECT_EQ(line->stateTo, "error");
+    EXPECT_GE(line->duration, 14);
+
+    line.reset();
+
+    std::this_thread::sleep_for(std::chrono::milliseconds(10));
+    EXPECT_NO_THROW(state = Namespace_01::State::connected);
+    EXPECT_TRUE(line);
+    // Compiler-specific?
+    EXPECT_NE(line->typeName.find("Namespace_01::State"), std::string::npos);
+    EXPECT_EQ(line->stateFrom, "error");
+    EXPECT_EQ(line->stateTo, "connected");
+    EXPECT_GE(line->duration, 9);
+
+    line.reset();
+
+    std::this_thread::sleep_for(std::chrono::milliseconds(20));
+  } // <--- state destruction
+
+  EXPECT_TRUE(line);
+  // Compiler-specific?
+  EXPECT_NE(line->typeName.find("Namespace_01::State"), std::string::npos);
+  EXPECT_EQ(line->stateFrom, "connected");
+  EXPECT_EQ(line->stateTo, "destruction");
+  EXPECT_GE(line->duration, 19);
+}
+
+
+TEST(StateReportableTest, Test_05)
+{
+  std::unique_ptr<ReportLine> line;
+
+  {
+    State<Namespace_02::State, std::chrono::milliseconds>
+    state(Namespace_02::State::none, [&line](auto &&l) { line = std::make_unique<ReportLine>(l); });
+
+    EXPECT_FALSE(line);
+
+    std::this_thread::sleep_for(std::chrono::milliseconds(5));
+    EXPECT_NO_THROW(state = Namespace_02::State::preparing);
+    EXPECT_TRUE(line);
+    // Compiler-specific?
+    EXPECT_NE(line->typeName.find("Namespace_02::State"), std::string::npos);
+    EXPECT_EQ(line->stateFrom, "none");
+    EXPECT_EQ(line->stateTo, "preparing");
+    EXPECT_GE(line->duration, 4);
+
+    line.reset();
+
+    std::this_thread::sleep_for(std::chrono::milliseconds(10));
+    EXPECT_NO_THROW(state = Namespace_02::State::working);
+    EXPECT_TRUE(line);
+    // Compiler-specific?
+    EXPECT_NE(line->typeName.find("Namespace_02::State"), std::string::npos);
+    EXPECT_EQ(line->stateFrom, "preparing");
+    EXPECT_EQ(line->stateTo, "working");
+    EXPECT_GE(line->duration, 9);
+
+    line.reset();
+
+    std::this_thread::sleep_for(std::chrono::milliseconds(15));
+    EXPECT_NO_THROW(state = Namespace_02::State::finished);
+    EXPECT_TRUE(line);
+    // Compiler-specific?
+    EXPECT_NE(line->typeName.find("Namespace_02::State"), std::string::npos);
+    EXPECT_EQ(line->stateFrom, "working");
+    EXPECT_EQ(line->stateTo, "finished");
+    EXPECT_GE(line->duration, 14);
+
+    line.reset();
+
+    std::this_thread::sleep_for(std::chrono::milliseconds(20));
+    EXPECT_NO_THROW(state = Namespace_02::State::error);
+    EXPECT_TRUE(line);
+    // Compiler-specific?
+    EXPECT_NE(line->typeName.find("Namespace_02::State"), std::string::npos);
+    EXPECT_EQ(line->stateFrom, "finished");
+    EXPECT_EQ(line->stateTo, "error");
+    EXPECT_GE(line->duration, 19);
+
+    line.reset();
+
+    std::this_thread::sleep_for(std::chrono::milliseconds(10));
+  } // <--- state destruction
+
+  // Compiler-specific?
+  EXPECT_NE(line->typeName.find("Namespace_02::State"), std::string::npos);
+  EXPECT_EQ(line->stateFrom, "error");
+  EXPECT_EQ(line->stateTo, "destruction");
+  EXPECT_GE(line->duration, 9);
 }
 
 

@@ -80,15 +80,16 @@ namespace StateReportable
     fromBuf << m_state;
     toBuf << state;
 
-    m_state = state;
-    m_timestamp = now;
-
     auto line = ReportLine(
       typeid(State_t).name(),
       fromBuf.str(),
       toBuf.str(),
       std::chrono::duration_cast<Duration_t>(now - m_timestamp).count()
     );
+
+    m_state = state;
+    m_timestamp = now;
+
     m_reportFn(std::move(line));
   }
 } // namespace StateReportable
