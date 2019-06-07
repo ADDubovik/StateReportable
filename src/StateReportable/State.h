@@ -76,12 +76,13 @@ namespace StateReportable
 
     auto now = std::chrono::steady_clock::now();
 
-    m_state = state;
-    m_timestamp = now;
-
     std::ostringstream fromBuf, toBuf;
     fromBuf << m_state;
     toBuf << state;
+
+    m_state = state;
+    m_timestamp = now;
+
     auto line = ReportLine(
       typeid(State_t).name(),
       fromBuf.str(),
