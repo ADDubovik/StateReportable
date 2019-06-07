@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "State.h"
+#include "StateBase.h"
 
 #include <thread>
 #include <memory>
@@ -60,7 +60,7 @@ namespace Namespace_02
 using namespace StateReportable;
 
 
-TEST(StateTest, Test_01)
+TEST(StateBaseTest, Test_01)
 {
   EXPECT_NO_THROW(std::cout
                   << Namespace_01::State::non_inintialized << " "
@@ -76,12 +76,12 @@ TEST(StateTest, Test_01)
 }
 
 
-TEST(StateTest, Test_02)
+TEST(StateBaseTest, Test_02)
 {
   std::stringstream stream;
   
   {
-    State<Namespace_01::State, std::chrono::milliseconds>
+    StateBase<Namespace_01::State, std::chrono::milliseconds>
     state(Namespace_01::State::non_inintialized, [&stream](auto & str) { stream << str << std::endl; });
 
     std::this_thread::sleep_for(std::chrono::milliseconds(5));
@@ -98,12 +98,12 @@ TEST(StateTest, Test_02)
 }
 
 
-TEST(StateReportableTest, Test_03)
+TEST(StateBaseTest, Test_03)
 {
   std::stringstream stream;
 
   {
-    State<Namespace_02::State, std::chrono::milliseconds>
+    StateBase<Namespace_02::State, std::chrono::milliseconds>
     state(Namespace_02::State::none, [&stream](auto & str) { stream << str << std::endl; });
 
     std::this_thread::sleep_for(std::chrono::milliseconds(5));
@@ -122,12 +122,12 @@ TEST(StateReportableTest, Test_03)
 }
 
 
-TEST(StateTest, Test_04)
+TEST(StateBaseTest, Test_04)
 {
   std::unique_ptr<ReportLine> line;
   
   {
-    State<Namespace_01::State, std::chrono::milliseconds>
+    StateBase<Namespace_01::State, std::chrono::milliseconds>
     state(Namespace_01::State::non_inintialized, [&line](auto &&l) { line = std::make_unique<ReportLine>(l); });
 
     EXPECT_FALSE(line);
@@ -188,12 +188,12 @@ TEST(StateTest, Test_04)
 }
 
 
-TEST(StateReportableTest, Test_05)
+TEST(StateBaseTest, Test_05)
 {
   std::unique_ptr<ReportLine> line;
 
   {
-    State<Namespace_02::State, std::chrono::milliseconds>
+    StateBase<Namespace_02::State, std::chrono::milliseconds>
     state(Namespace_02::State::none, [&line](auto &&l) { line = std::make_unique<ReportLine>(l); });
 
     EXPECT_FALSE(line);

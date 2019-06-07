@@ -5,7 +5,8 @@ set(SRC
 	ReportLine.h
 	split.cpp
 	split.h
-	State.h
+	StateBase.h
+	StateToFile.h
 	TemplateHelpers.h
 )
 

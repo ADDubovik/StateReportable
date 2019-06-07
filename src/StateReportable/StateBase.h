@@ -16,29 +16,31 @@ namespace StateReportable
   // State_t should be enum or enum class with operator<< defined.
   // Duration_t should be in instantiation of std::chrono::duration.
   template <typename State_t, typename Duration_t = std::chrono::milliseconds>
-  class State
+  class StateBase
   {
   public:
     using ReportFn = std::function<void(ReportLine &&)>;
+    using State = State_t;
+    using Duration = Duration_t;
 
-    State() = delete;
+    StateBase() = delete;
 
-    explicit State(const State_t state, ReportFn reportFn) :
+    explicit StateBase(const State_t state, ReportFn reportFn) :
       m_state(state),
       m_timestamp(std::chrono::steady_clock::now()),
       m_reportFn(reportFn)
     {
       static_assert(TemplateHelpers::is_instance_of_a_given_class_template<Duration_t, std::chrono::duration>::value,
-                    "Incorrect StateReportable::State instantiation");
+                    "Incorrect StateReportable::StateBase instantiation");
     }
-    ~State();
+    ~StateBase();
 
-    State(const State &) = delete;
-    State(State &&) = default;
-    State &operator=(const State &) = delete;
-    State &operator=(State &&) = default;
+    StateBase(const StateBase &) = delete;
+    StateBase(StateBase &&) = default;
+    StateBase &operator=(const StateBase &) = delete;
+    StateBase &operator=(StateBase &&) = default;
 
-    State<State_t, Duration_t> &operator=(const State_t state) { setState(state); return *this; };
+    StateBase<State_t, Duration_t> &operator=(const State_t state) { setState(state); return *this; };
     operator State_t() const { return m_state; };
   private:
     State_t m_state;
@@ -50,7 +52,7 @@ namespace StateReportable
 
 
   template <typename State_t, typename Duration_t>
-  State<State_t, Duration_t>::~State()
+  StateBase<State_t, Duration_t>::~StateBase()
   {
     if ( !m_reportFn )
       return;
@@ -69,7 +71,7 @@ namespace StateReportable
   }
 
   template <typename State_t, typename Duration_t>
-  void State<State_t, Duration_t>::setState(const State_t state)
+  void StateBase<State_t, Duration_t>::setState(const State_t state)
   {
     if ( state == m_state || !m_reportFn )
       return;
