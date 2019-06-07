@@ -19,7 +19,7 @@ namespace StateReportable
     // Perfect forwarding for strings.
     // User should provide all the data in c-tor to avoid non-initialized fields.
     template<typename T1, typename T2, typename T3>
-    ReportLine(T1 typeName_, T2 stateFrom_, T3 stateTo_, long long duration_)
+    ReportLine(T1 &&typeName_, T2 &&stateFrom_, T3 &&stateTo_, long long duration_)
         : typeName(std::forward<T1>(typeName_)),
         stateFrom(std::forward<T2>(stateFrom_)),
         stateTo(std::forward<T3>(stateTo_)),
