@@ -14,7 +14,6 @@ TEST(splitTest, Test_01)
 }
 
 
-
 TEST(splitTest, Test_02)
 {
   EXPECT_NO_THROW(
@@ -22,7 +21,6 @@ TEST(splitTest, Test_02)
     EXPECT_EQ(result.size(), 0u);
   );
 }
-
 
 
 TEST(splitTest, Test_03)
@@ -34,7 +32,6 @@ TEST(splitTest, Test_03)
 }
 
 
-
 TEST(splitTest, Test_04)
 {
   std::vector<std::string> expected = {"first", "second", "third", "fourth"};
@@ -44,7 +41,6 @@ TEST(splitTest, Test_04)
     EXPECT_EQ(result, expected);
   );
 }
-
 
 
 TEST(splitTest, Test_05)
