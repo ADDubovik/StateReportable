@@ -253,6 +253,4 @@ TEST(StateReportableTest, Test_05)
 }
 
 
-
-
 #include "main.h"

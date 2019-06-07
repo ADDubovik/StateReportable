@@ -13,7 +13,7 @@
 namespace StateReportable
 {
   // Base class for all states.
-  // State_t should be enum or enum class.
+  // State_t should be enum or enum class with operator<< defined.
   // Duration_t should be in instantiation of std::chrono::duration.
   template <typename State_t, typename Duration_t = std::chrono::milliseconds>
   class State
