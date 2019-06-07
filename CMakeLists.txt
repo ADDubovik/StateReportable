@@ -16,7 +16,7 @@ include(cmake/projecthelper.cmake)
 
 PRINT_ALL_CMAKE_SETTINGS()
 
-#add_subdirectory(src)
+add_subdirectory(src/StateReportable)
 
 enable_testing()
 
