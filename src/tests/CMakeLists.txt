@@ -17,7 +17,7 @@ set(GTEST_ROOT ${GTest_DIR}/googletest)
 find_package(GTest)
 
 
-macro(ADD_TEST testName)
+macro(STATE_REPORTABLE_ADD_TEST testName)
 	add_executable(
 		${testName}
 		${ARGN}
@@ -26,7 +26,6 @@ macro(ADD_TEST testName)
 	)
 	GTEST_ADD_TESTS(${testName} "" ${ARGN})
 	set_property(TARGET ${testName} PROPERTY FOLDER "Tests/Auto")
-	target_link_libraries(${testName} ${ADDITIONAL_LIBS})
 	target_compile_options(${testName} PRIVATE -DPROJECT_NAME="AutoTests" -DPROJECT_NAME_W=L"AutoTests")
 endmacro()
 
@@ -34,5 +33,7 @@ add_definitions(
 	-DGTEST_LANG_CXX11
 )
 
-ADD_TEST(ReportLineTest ReportLineTest.cpp) 
+STATE_REPORTABLE_ADD_TEST(ReportLineTest ReportLineTest/ReportLineTest.cpp) 
 	target_link_libraries(ReportLineTest StateReportable_lib)
+STATE_REPORTABLE_ADD_TEST(splitTest splitTest/splitTest.cpp) 
+	target_link_libraries(splitTest StateReportable_lib)

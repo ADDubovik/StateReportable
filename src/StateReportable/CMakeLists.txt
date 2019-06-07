@@ -3,6 +3,8 @@ project(StateReportable)
 set(SRC
 	ReportLine.cpp
 	ReportLine.h
+	split.cpp
+	split.h
 	State.h
 	TemplateHelpers.h
 )
