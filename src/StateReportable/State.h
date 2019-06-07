@@ -4,23 +4,24 @@
 #include "ReportLine.h"
 
 #include <chrono>
-#include <ostream>
 #include <sstream>
 #include <string>
 #include <typeinfo>
-#include <optional>
 #include <functional>
 
 
 namespace StateReportable
 {
-  // State_t should be enum.
+  // Base class for all states.
+  // State_t should be enum or enum class.
   // Duration_t should be in instantiation of std::chrono::duration.
-  template <typename State_t, typename Duration_t>
+  template <typename State_t, typename Duration_t = std::chrono::milliseconds>
   class State
   {
   public:
-    using ReportFn = std::function<void(const std::string &)>;
+    using ReportFn = std::function<void(ReportLine &&)>;
+
+    State() = delete;
 
     explicit State(const State_t state, ReportFn reportFn) :
       m_state(state),
@@ -57,16 +58,14 @@ namespace StateReportable
     auto now = std::chrono::steady_clock::now();
     std::ostringstream stateBuf;
     stateBuf << m_state;
-    std::ostringstream buf;
-    buf << ReportLine
-    {
+    auto line = ReportLine(
       typeid(State_t).name(),
       stateBuf.str(),
       "destruction",
       std::chrono::duration_cast<Duration_t>(now - m_timestamp).count()
-    }
-        << "\n";
-    m_reportFn(buf.str());
+    );
+
+    m_reportFn(std::move(line));
   }
 
   template <typename State_t, typename Duration_t>
@@ -76,21 +75,19 @@ namespace StateReportable
       return;
 
     auto now = std::chrono::steady_clock::now();
+
+    m_state = state;
+    m_timestamp = now;
+
     std::ostringstream fromBuf, toBuf;
     fromBuf << m_state;
     toBuf << state;
-    std::ostringstream buf;
-    buf << ReportLine
-    {
+    auto line = ReportLine(
       typeid(State_t).name(),
       fromBuf.str(),
       toBuf.str(),
       std::chrono::duration_cast<Duration_t>(now - m_timestamp).count()
-    }
-        << "\n";
-
-    m_state = state;
-    m_timestamp = now;
-    m_reportFn(buf.str());
+    );
+    m_reportFn(std::move(line));
   }
 } // namespace StateReportable
