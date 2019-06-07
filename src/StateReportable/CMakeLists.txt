@@ -7,6 +7,8 @@ set(SRC
 	split.h
 	StateBase.h
 	StateToFile.h
+	StateToFileConfig.cpp
+	StateToFileConfig.h
 	TemplateHelpers.h
 )
 
