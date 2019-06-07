@@ -1,0 +1,38 @@
+enable_testing()
+
+set(GTest_DIR ${CMAKE_SOURCE_DIR}/3rdparty/googletest)
+set(GTest_INCLUDE_DIR ${GTest_DIR}/googletest/include)
+set(GTest_ADD_TO_SRC  ${GTest_DIR}/googletest/src/gtest-all.cc)
+
+
+include_directories(
+	${GTest_INCLUDE_DIR}
+	${GTest_INCLUDE_DIR}/..
+	${CMAKE_SOURCE_DIR}/src/StateReportable
+	${CMAKE_SOURCE_DIR}/src/tests
+)
+
+set(GTEST_ROOT ${GTest_DIR}/googletest)
+
+find_package(GTest)
+
+
+macro(ADD_TEST testName)
+	add_executable(
+		${testName}
+		${ARGN}
+		main.h
+		${GTest_ADD_TO_SRC}
+	)
+	GTEST_ADD_TESTS(${testName} "" ${ARGN})
+	set_property(TARGET ${testName} PROPERTY FOLDER "Tests/Auto")
+	target_link_libraries(${testName} ${ADDITIONAL_LIBS})
+	target_compile_options(${testName} PRIVATE -DPROJECT_NAME="AutoTests" -DPROJECT_NAME_W=L"AutoTests")
+endmacro()
+
+add_definitions(
+	-DGTEST_LANG_CXX11
+)
+
+ADD_TEST(ReportLineTest ReportLineTest.cpp) 
+	target_link_libraries(ReportLineTest StateReportable_lib)
