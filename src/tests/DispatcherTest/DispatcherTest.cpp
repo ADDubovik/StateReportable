@@ -11,17 +11,19 @@
 using namespace StateReportable;
 
 using Storage = std::vector<core::ReportLine>;
-Storage globalStorage;
+using StorageWithMutex = std::pair<std::mutex, Storage>;
+StorageWithMutex globalStorage;
 
 
 struct TestDestination
 {
   void send(core::ReportLine &&line)
   {
-    if ( globalStorage.size() == globalStorage.capacity() )
-      globalStorage.reserve(std::max(1u, globalStorage.size() * 2));
+    std::lock_guard<std::mutex> guard(globalStorage.first);
+    if ( globalStorage.second.size() == globalStorage.second.capacity() )
+      globalStorage.second.reserve(std::max(1u, globalStorage.second.size() * 2));
 
-    globalStorage.emplace_back(std::move(line));
+    globalStorage.second.emplace_back(std::move(line));
   }
 };
 
@@ -53,10 +55,20 @@ TEST(DispatcherTest, Test_01)
   else
     EXPECT_TRUE(false);
 
-  std::this_thread::sleep_for(std::chrono::milliseconds(10));  
-  EXPECT_EQ(expected, globalStorage);
+  while (true)
+  {
+    {
+      std::lock_guard<std::mutex> guard(globalStorage.first);
+      if ( globalStorage.second.size() == expected.size() )
+        break;
+    }
+    std::this_thread::sleep_for(std::chrono::milliseconds(1));
+  }
 
-  globalStorage.clear();
+  std::lock_guard<std::mutex> guard(globalStorage.first);
+  EXPECT_EQ(expected, globalStorage.second);
+
+  globalStorage.second.clear();
 }
 
 
@@ -79,15 +91,24 @@ TEST(DispatcherTest, Test_02)
   else
     EXPECT_TRUE(false);
 
-  std::this_thread::sleep_for(std::chrono::milliseconds(100));  
+  while (true)
+  {
+    {
+      std::lock_guard<std::mutex> guard(globalStorage.first);
+      if ( globalStorage.second.size() == expected.size() )
+        break;
+    }
+    std::this_thread::sleep_for(std::chrono::milliseconds(1));
+  }
 
-  EXPECT_EQ(expected.size(), globalStorage.size());
+  std::lock_guard<std::mutex> guard(globalStorage.first);
+  EXPECT_EQ(expected.size(), globalStorage.second.size());
 
   std::sort(expected.begin(), expected.end());
-  std::sort(globalStorage.begin(), globalStorage.end());
-  EXPECT_EQ(expected, globalStorage);
+  std::sort(globalStorage.second.begin(), globalStorage.second.end());
+  EXPECT_EQ(expected, globalStorage.second);
 
-  globalStorage.clear();
+  globalStorage.second.clear();
 }
 
 
@@ -104,8 +125,7 @@ void sendSome(Storage::const_iterator begin, Storage::const_iterator end)
 }
 
 
-template<typename Duration_t>
-void test(size_t reportBySingleThread, size_t reporterThreads, Duration_t sleep)
+void test(size_t reportBySingleThread, size_t reporterThreads)
 {
   Storage expected;
   for ( size_t i = 0u; i < reportBySingleThread * reporterThreads; ++i )
@@ -128,21 +148,30 @@ void test(size_t reportBySingleThread, size_t reporterThreads, Duration_t sleep)
       ));
   } // <--- waiting for all reporters to finish
 
-  std::this_thread::sleep_for(sleep);
+  while (true)
+  {
+    {
+      std::lock_guard<std::mutex> guard(globalStorage.first);
+      if ( globalStorage.second.size() == expected.size() )
+        break;
+    }
+    std::this_thread::sleep_for(std::chrono::milliseconds(1));
+  }
 
-  EXPECT_EQ(expected.size(), globalStorage.size());
+  std::lock_guard<std::mutex> guard(globalStorage.first);
+  EXPECT_EQ(expected.size(), globalStorage.second.size());
 
   std::sort(expected.begin(), expected.end());
-  std::sort(globalStorage.begin(), globalStorage.end());
-  EXPECT_EQ(expected, globalStorage);
+  std::sort(globalStorage.second.begin(), globalStorage.second.end());
+  EXPECT_EQ(expected, globalStorage.second);
 
-  globalStorage.clear();
+  globalStorage.second.clear();
 }
 
 
 TEST(DispatcherTest, Test_03)
 {
-  test(2'500, 4, std::chrono::milliseconds(100));
+  test(2'500, 4);
 }
 
 
@@ -157,7 +186,7 @@ TEST(DispatcherTest, HeavyLoadTest)
     const size_t reportBySingleThread = 100 + 100 * (rand() & 0xf);
     const size_t reporterThreads = 1 + rand() & 0xf;
 
-    test(reportBySingleThread, reporterThreads, std::chrono::milliseconds(200));
+    test(reportBySingleThread, reporterThreads);
   }
 }
 
