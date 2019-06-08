@@ -11,7 +11,7 @@ namespace StateReportable
   class StateToFile : public core::StateBase<State_t, Duration_t>
   {
   public:
-    using Dispatcher = core::Dispatcher<core::ReportLine, ReporterToFile>;
+    using Dispatcher = core::Dispatcher<ReporterToFile>;
     using Base = core::StateBase<State_t, Duration_t>;
 
     explicit StateToFile(const State_t state)

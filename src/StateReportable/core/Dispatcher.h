@@ -14,15 +14,15 @@ namespace StateReportable::core
   // Thread-safe.
   // Creates a just one Destination_t instance, and use Destination_t::send function
   // to redirect data from single thread.
-  template<typename Data_t, typename Destination_t>
+  template<typename Destination_t>
   class Dispatcher
   {
-    static_assert(std::is_default_constructible_v<Destination_t>);
-    static_assert(std::is_move_constructible_v<Data_t>);
-
   public:
-    using Data = Data_t;
+    using Data = typename Destination_t::Data;
     using Destination = Destination_t;
+
+    static_assert(std::is_default_constructible_v<Destination_t>);
+    static_assert(std::is_move_constructible_v<Data>);
 
     ~Dispatcher() = default;
 
@@ -45,7 +45,7 @@ namespace StateReportable::core
         m_scopeGuard{this, [this](void *) { m_stop = true; }}
     {};
 
-    using My_t = Dispatcher<Data, Destination>;
+    using My_t = Dispatcher<Destination>;
 
     using Storage = std::vector<Data>;
     using Exchanger = std::pair<std::mutex, Storage>;
@@ -61,8 +61,8 @@ namespace StateReportable::core
   };
 
 
-  template<typename Data_t, typename Destination_t>
-  std::weak_ptr<Dispatcher<Data_t, Destination_t>> Dispatcher<Data_t, Destination_t>::instanceWeak()
+  template<typename Destination_t>
+  std::weak_ptr<Dispatcher<Destination_t>> Dispatcher<Destination_t>::instanceWeak()
   {
     // new needed and no std::make_shared because of private c-tor
     static auto inst = std::shared_ptr<My_t>(new My_t());
@@ -70,8 +70,8 @@ namespace StateReportable::core
   }
 
 
-  template<typename Data_t, typename Destination_t>
-  void Dispatcher<Data_t, Destination_t>::send(Data &&data)
+  template<typename Destination_t>
+  void Dispatcher<Destination_t>::send(Data &&data)
   {
     std::lock_guard<std::mutex> guard(m_exchanger.first);
     if ( m_exchanger.second.size() == m_exchanger.second.capacity() )
@@ -81,8 +81,8 @@ namespace StateReportable::core
   }
 
 
-  template<typename Data_t, typename Destination_t>
-  void Dispatcher<Data_t, Destination_t>::dispatch(Exchanger &exchanger, std::atomic<bool> &stop)
+  template<typename Destination_t>
+  void Dispatcher<Destination_t>::dispatch(Exchanger &exchanger, std::atomic<bool> &stop)
   {
     std::vector<Data> localStorage;
     Destination destination;

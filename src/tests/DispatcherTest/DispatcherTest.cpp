@@ -17,7 +17,9 @@ StorageWithMutex globalStorage;
 
 struct TestDestination
 {
-  void send(core::ReportLine &&line)
+  using Data = core::ReportLine;
+
+  void send(Data &&line)
   {
     std::lock_guard<std::mutex> guard(globalStorage.first);
     if ( globalStorage.second.size() == globalStorage.second.capacity() )
@@ -50,7 +52,7 @@ core::ReportLine getReportLineRandom()
 TEST(DispatcherTest, Test_01)
 {
   Storage expected = {getReportLineRandom()};
-  if ( auto strong = core::Dispatcher<core::ReportLine, TestDestination>::instanceWeak().lock() )
+  if ( auto strong = core::Dispatcher<TestDestination>::instanceWeak().lock() )
     strong->send(core::ReportLine(*expected.cbegin()));
   else
     EXPECT_TRUE(false);
@@ -85,7 +87,7 @@ TEST(DispatcherTest, Test_02)
     expected.emplace_back(getReportLineRandom());
   }
 
-  if ( auto strong = core::Dispatcher<core::ReportLine, TestDestination>::instanceWeak().lock() )
+  if ( auto strong = core::Dispatcher<TestDestination>::instanceWeak().lock() )
     for ( auto const &elem : expected )
       strong->send(core::ReportLine(elem));
   else
@@ -114,7 +116,7 @@ TEST(DispatcherTest, Test_02)
 
 void sendSome(Storage::const_iterator begin, Storage::const_iterator end)
 {
-  if ( auto strong = core::Dispatcher<core::ReportLine, TestDestination>::instanceWeak().lock() )
+  if ( auto strong = core::Dispatcher<TestDestination>::instanceWeak().lock() )
     for ( auto iter = begin; iter != end; ++iter )
     {
       strong->send(core::ReportLine(*iter));

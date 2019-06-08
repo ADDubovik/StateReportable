@@ -16,7 +16,9 @@ using namespace StateReportable;
 
 struct TestDestination
 {
-  void send(double &&) {}
+  using Data = double;
+
+  void send(Data &&) {}
 };
 
 
@@ -37,7 +39,7 @@ TEST(DispatcherWeakSingletonTest, Test_01)
   // - longLiveGuard
   ScopeGuard guard(
       &i,
-      [weak = core::Dispatcher<double, TestDestination>::instanceWeak()](int *)
+      [weak = core::Dispatcher<TestDestination>::instanceWeak()](int *)
       {
         std::cout << "OK" << std::endl;
         EXPECT_FALSE(weak.lock());

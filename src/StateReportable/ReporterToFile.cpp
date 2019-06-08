@@ -15,7 +15,7 @@ namespace StateReportable
       m_file = std::ofstream(*name);
   }
 
-  void ReporterToFile::send(core::ReportLine && line)
+  void ReporterToFile::send(Data && line)
   {
     if ( m_file )
       *m_file << line;

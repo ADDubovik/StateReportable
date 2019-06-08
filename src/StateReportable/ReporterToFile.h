@@ -11,6 +11,8 @@ namespace StateReportable
   class ReporterToFile
   {
   public:
+    using Data = core::ReportLine;
+
     ReporterToFile();
     ~ReporterToFile() = default;
 
@@ -20,7 +22,7 @@ namespace StateReportable
     ReporterToFile& operator=(const ReporterToFile &) = delete;
     ReporterToFile& operator=(ReporterToFile &&) = delete;
 
-    void send(core::ReportLine &&line);
+    void send(Data &&line);
 
   private:
     std::optional<std::ofstream> m_file;
