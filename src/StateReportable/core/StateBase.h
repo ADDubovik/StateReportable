@@ -10,7 +10,7 @@
 #include <functional>
 
 
-namespace StateReportable
+namespace StateReportable::core
 {
   // Base class for all states.
   // State_t should be enum or enum class with operator<< defined.
@@ -94,4 +94,4 @@ namespace StateReportable
 
     m_reportFn(std::move(line));
   }
-} // namespace StateReportable
+} // namespace StateReportable::core

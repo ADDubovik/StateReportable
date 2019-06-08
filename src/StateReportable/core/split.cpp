@@ -4,7 +4,7 @@
 #include <algorithm>
 
 
-namespace StateReportable
+namespace StateReportable::core
 {
   std::vector<std::string> split(const std::string &str, char separator)
   {
@@ -35,4 +35,4 @@ namespace StateReportable
 
     return result;
   }
-} // namespace StateReportable
+} // namespace StateReportable::core

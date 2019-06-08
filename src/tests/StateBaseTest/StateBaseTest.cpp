@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "StateBase.h"
+#include "core/StateBase.h"
 
 #include <thread>
 #include <memory>
@@ -81,7 +81,7 @@ TEST(StateBaseTest, Test_02)
   std::stringstream stream;
   
   {
-    StateBase<Namespace_01::State, std::chrono::milliseconds>
+    core::StateBase<Namespace_01::State, std::chrono::milliseconds>
     state(Namespace_01::State::non_inintialized, [&stream](auto & str) { stream << str << std::endl; });
 
     std::this_thread::sleep_for(std::chrono::milliseconds(5));
@@ -103,7 +103,7 @@ TEST(StateBaseTest, Test_03)
   std::stringstream stream;
 
   {
-    StateBase<Namespace_02::State, std::chrono::milliseconds>
+    core::StateBase<Namespace_02::State, std::chrono::milliseconds>
     state(Namespace_02::State::none, [&stream](auto & str) { stream << str << std::endl; });
 
     std::this_thread::sleep_for(std::chrono::milliseconds(5));
@@ -124,11 +124,11 @@ TEST(StateBaseTest, Test_03)
 
 TEST(StateBaseTest, Test_04)
 {
-  std::unique_ptr<ReportLine> line;
+  std::unique_ptr<core::ReportLine> line;
   
   {
-    StateBase<Namespace_01::State, std::chrono::milliseconds>
-    state(Namespace_01::State::non_inintialized, [&line](auto &&l) { line = std::make_unique<ReportLine>(l); });
+    core::StateBase<Namespace_01::State, std::chrono::milliseconds>
+    state(Namespace_01::State::non_inintialized, [&line](auto &&l) { line = std::make_unique<core::ReportLine>(l); });
 
     EXPECT_FALSE(line);
 
@@ -190,11 +190,11 @@ TEST(StateBaseTest, Test_04)
 
 TEST(StateBaseTest, Test_05)
 {
-  std::unique_ptr<ReportLine> line;
+  std::unique_ptr<core::ReportLine> line;
 
   {
-    StateBase<Namespace_02::State, std::chrono::milliseconds>
-    state(Namespace_02::State::none, [&line](auto &&l) { line = std::make_unique<ReportLine>(l); });
+    core::StateBase<Namespace_02::State, std::chrono::milliseconds>
+    state(Namespace_02::State::none, [&line](auto &&l) { line = std::make_unique<core::ReportLine>(l); });
 
     EXPECT_FALSE(line);
 

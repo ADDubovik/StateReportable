@@ -8,7 +8,7 @@
 #include <type_traits>
 
 
-namespace StateReportable
+namespace StateReportable::core
 {
   // Modified weak_ptr-based singleton - to allow safe calls from destructors.
   // Thread-safe.
@@ -117,4 +117,4 @@ namespace StateReportable
     grabExchangerToLocal(exchanger);
     sendLocalToDestination();
   }
-} // namespace StateReportable
+} // namespace StateReportable::core

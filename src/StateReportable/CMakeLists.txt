@@ -1,17 +1,17 @@
 project(StateReportable)
 
 set(SRC
-	Dispatcher.h
-	ReportLine.cpp
-	ReportLine.h
-	split.cpp
-	split.h
-	StateBase.h
+	core/Dispatcher.h
+	core/ReportLine.cpp
+	core/ReportLine.h
+	core/split.cpp
+	core/split.h
+	core/StateBase.h
 	StateToFile.cpp
 	StateToFile.h
 	StateToFileConfig.cpp
 	StateToFileConfig.h
-	TemplateHelpers.h
+	core/TemplateHelpers.h
 )
 
 include_directories(

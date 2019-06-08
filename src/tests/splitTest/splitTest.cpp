@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "split.h"
+#include "core/split.h"
 
 #include <array>
 
@@ -8,7 +8,7 @@
 TEST(splitTest, Test_01)
 {
   EXPECT_NO_THROW(
-    auto result = StateReportable::split("", ' ');
+    auto result = StateReportable::core::split("", ' ');
     EXPECT_EQ(result.size(), 0u);
   );
 }
@@ -17,7 +17,7 @@ TEST(splitTest, Test_01)
 TEST(splitTest, Test_02)
 {
   EXPECT_NO_THROW(
-    auto result = StateReportable::split(" ", ' ');
+    auto result = StateReportable::core::split(" ", ' ');
     EXPECT_EQ(result.size(), 0u);
   );
 }
@@ -26,7 +26,7 @@ TEST(splitTest, Test_02)
 TEST(splitTest, Test_03)
 {
   EXPECT_NO_THROW(
-    auto result = StateReportable::split("                      ", ' ');
+    auto result = StateReportable::core::split("                      ", ' ');
     EXPECT_EQ(result.size(), 0u);
   );
 }
@@ -36,7 +36,7 @@ TEST(splitTest, Test_04)
 {
   std::vector<std::string> expected = {"first", "second", "third", "fourth"};
   EXPECT_NO_THROW(
-    auto result = StateReportable::split("first\tsecond\tthird\t\t\tfourth", '\t');
+    auto result = StateReportable::core::split("first\tsecond\tthird\t\t\tfourth", '\t');
     EXPECT_EQ(result.size(), 4u);
     EXPECT_EQ(result, expected);
   );
@@ -48,7 +48,7 @@ TEST(splitTest, Test_05)
   std::vector<std::string> expected = {"first", "second", "third", "fourth"};
   EXPECT_NO_THROW(
     // trailing \t added
-    auto result = StateReportable::split("first\tsecond\tthird\t\t\tfourth\t", '\t');
+    auto result = StateReportable::core::split("first\tsecond\tthird\t\t\tfourth\t", '\t');
     EXPECT_EQ(result.size(), 4u);
     EXPECT_EQ(result, expected);
   );
@@ -99,7 +99,7 @@ TEST(splitTest, GreatRandomTest)
     }
 
     EXPECT_NO_THROW(
-      auto result = StateReportable::split(toProcess, separator);
+      auto result = StateReportable::core::split(toProcess, separator);
       EXPECT_EQ(result, expected);
     );
   }

@@ -2,7 +2,7 @@
 #include "split.h"
 
 
-namespace StateReportable
+namespace StateReportable::core
 {
   const char separator = '\t';
 
@@ -19,13 +19,13 @@ namespace StateReportable
                       atoll(splitted[3].c_str()));
   }
 
-  std::ostream &operator<<(std::ostream &stream, const StateReportable::ReportLine &reportLine)
+  std::ostream &operator<<(std::ostream &stream, const ReportLine &reportLine)
   {
-    stream << reportLine.typeName << StateReportable::separator
-           << reportLine.stateFrom << StateReportable::separator
-           << reportLine.stateTo << StateReportable::separator
+    stream << reportLine.typeName << separator
+           << reportLine.stateFrom << separator
+           << reportLine.stateTo << separator
            << reportLine.duration;
 
     return stream;
   }
-} // namespace StateReportable
+} // namespace StateReportable::core

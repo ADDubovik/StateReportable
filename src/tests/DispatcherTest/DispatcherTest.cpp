@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 
-#include "Dispatcher.h"
-#include "ReportLine.h"
+#include "core/Dispatcher.h"
+#include "core/ReportLine.h"
 
 #include <vector>
 #include <algorithm>
@@ -10,13 +10,13 @@
 
 using namespace StateReportable;
 
-using Storage = std::vector<ReportLine>;
+using Storage = std::vector<core::ReportLine>;
 Storage globalStorage;
 
 
 struct TestDestination
 {
-  void send(ReportLine &&line)
+  void send(core::ReportLine &&line)
   {
     if ( globalStorage.size() == globalStorage.capacity() )
       globalStorage.reserve(std::max(1u, globalStorage.size() * 2));
@@ -39,7 +39,7 @@ std::string getStringRandom()
 }
 
 
-ReportLine getReportLineRandom()
+core::ReportLine getReportLineRandom()
 {
   return {getStringRandom(), getStringRandom(), getStringRandom(), rand() & 0xff};
 }
@@ -48,8 +48,8 @@ ReportLine getReportLineRandom()
 TEST(DispatcherTest, Test_01)
 {
   Storage expected = {getReportLineRandom()};
-  if ( auto lock = Dispatcher<ReportLine, TestDestination>::instanceWeak().lock() )
-    lock->send(ReportLine(*expected.cbegin()));
+  if ( auto lock = core::Dispatcher<core::ReportLine, TestDestination>::instanceWeak().lock() )
+    lock->send(core::ReportLine(*expected.cbegin()));
   else
     EXPECT_TRUE(false);
 
@@ -73,9 +73,9 @@ TEST(DispatcherTest, Test_02)
     expected.emplace_back(getReportLineRandom());
   }
 
-  if ( auto lock = Dispatcher<ReportLine, TestDestination>::instanceWeak().lock() )
+  if ( auto lock = core::Dispatcher<core::ReportLine, TestDestination>::instanceWeak().lock() )
     for ( auto const &elem : expected )
-      lock->send(ReportLine(elem));
+      lock->send(core::ReportLine(elem));
   else
     EXPECT_TRUE(false);
 
@@ -93,10 +93,10 @@ TEST(DispatcherTest, Test_02)
 
 void sendSome(Storage::const_iterator begin, Storage::const_iterator end)
 {
-  if ( auto lock = Dispatcher<ReportLine, TestDestination>::instanceWeak().lock() )
+  if ( auto lock = core::Dispatcher<core::ReportLine, TestDestination>::instanceWeak().lock() )
     for ( auto iter = begin; iter != end; ++iter )
     {
-      lock->send(ReportLine(*iter));
+      lock->send(core::ReportLine(*iter));
       std::this_thread::yield();
     }
   else

@@ -4,7 +4,7 @@
 #include <string>
 
 
-namespace StateReportable
+namespace StateReportable::core
 {
   // Represents one line of the report
   struct ReportLine
@@ -43,9 +43,9 @@ namespace StateReportable
     bool operator>(const ReportLine &oth)  const { return rank() >  oth.rank(); };
   };
 
-  std::ostream &operator<<(std::ostream &stream, const StateReportable::ReportLine &reportLine);
+  std::ostream &operator<<(std::ostream &stream, const ReportLine &reportLine);
 
   // Converts str to ReportLine.
   // Throws an exception if str is not consistent.
   ReportLine convertToReportLine(const std::string &str);
-} // namespace StateReportable
+} // namespace StateReportable::core
