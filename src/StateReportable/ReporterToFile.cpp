@@ -18,7 +18,7 @@ namespace StateReportable
   void ReporterToFile::send(Data && line)
   {
     if ( m_file )
-      *m_file << line;
+      *m_file << line << '\n';
   }
 } // namespace StateReportable
 
