@@ -49,7 +49,7 @@ namespace connection
       case https_state::init: return stream << "init";
       case https_state::allowed: return stream << "allowed";
       case https_state::resolved: return stream << "resolved";
-      case https_state::tcpReady: return stream << "finistcpReadyhed";
+      case https_state::tcpReady: return stream << "tcpReady";
       case https_state::sslReady: return stream << "sslReady";
       case https_state::wrote: return stream << "wrote";
       case https_state::read: return stream << "read";

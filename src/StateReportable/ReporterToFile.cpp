@@ -12,7 +12,7 @@ namespace StateReportable
   ReporterToFile::ReporterToFile()
   {
     if ( auto name = readFilenameFromFile(configPath) )
-      m_file = std::ofstream(*name);
+      m_file = std::ofstream(*name, std::ios::app);
   }
 
   void ReporterToFile::send(Data && line)
