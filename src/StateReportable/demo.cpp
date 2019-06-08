@@ -123,6 +123,30 @@ void run(std::atomic<bool> &interrupted)
     {
       if ( !elem )
         elem = std::make_unique<StateReportableHttps>(connection::getFirst());
+
+      if ( elem && ((rand() & 0xfff) == 0) )
+        elem.reset();
+
+      if ( elem && ((rand() & 0xf) == 0) )
+        *elem = connection::next(*elem);
+
+      if ( elem && connection::isLast(*elem) )
+        elem.reset();
+    }
+
+    for ( auto &elem : calcs )
+    {
+      if ( !elem )
+        elem = std::make_unique<StateReportableCalculating>(calculating::getFirst());
+
+      if ( elem && ((rand() & 0xfff) == 0) )
+        elem.reset();
+
+      if ( elem && ((rand() & 0xf) == 0) )
+        *elem = calculating::next(*elem);
+
+      if ( elem && calculating::isLast(*elem) )
+        elem.reset();
     }
 
     std::this_thread::sleep_for(std::chrono::milliseconds(1));
