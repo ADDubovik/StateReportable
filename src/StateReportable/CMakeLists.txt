@@ -1,17 +1,27 @@
 project(StateReportable)
 
-set(SRC
+set(SRC_CORE
 	core/Dispatcher.h
 	core/ReportLine.cpp
 	core/ReportLine.h
 	core/split.cpp
 	core/split.h
 	core/StateBase.h
+	core/TemplateHelpers.h
+)
+
+set(SRC_TO_FILE
+	ReporterToFile.cpp
+	ReporterToFile.h
 	StateToFile.cpp
 	StateToFile.h
 	StateToFileConfigReader.cpp
 	StateToFileConfigReader.h
-	core/TemplateHelpers.h
+)
+
+set(SRC
+	${SRC_CORE}
+	${SRC_TO_FILE}
 )
 
 include_directories(
