@@ -1,5 +1,5 @@
-#include "ReporterToFile.h"
-#include "StateToFileConfigReader.h"
+#include "Reporter.h"
+#include "ConfigReader.h"
 #include "core/DispatcherImplementation.h"
 
 #include <filesystem>

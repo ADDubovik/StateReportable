@@ -1,4 +1,4 @@
-#include "StateToFileConfigReader.h"
+#include "ConfigReader.h"
 
 #include <fstream>
 

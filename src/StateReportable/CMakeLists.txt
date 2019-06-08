@@ -14,11 +14,11 @@ set(SRC_CORE
 )
 
 set(SRC_TO_FILE
-	ReporterToFile.cpp
-	ReporterToFile.h
-	StateToFile.h
-	StateToFileConfigReader.cpp
-	StateToFileConfigReader.h
+	toFile/Reporter.cpp
+	toFile/Reporter.h
+	toFile/State.h
+	toFile/ConfigReader.cpp
+	toFile/ConfigReader.h
 )
 
 set(SRC

@@ -2,7 +2,7 @@
 
 #include "core/StateBase.h"
 #include "core/Dispatcher.h"
-#include "ReporterToFile.h"
+#include "Reporter.h"
 
 
 namespace StateReportable

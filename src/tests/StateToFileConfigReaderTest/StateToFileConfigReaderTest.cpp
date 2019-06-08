@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "StateToFileConfigReader.h"
+#include "toFile/ConfigReader.h"
 
 #include <fstream>
 
