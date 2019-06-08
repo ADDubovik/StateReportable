@@ -10,10 +10,18 @@
 
 namespace StateReportable::core
 {
+  // Forward declaration
+  template<typename Destination_t>
+  class DispatcherTestClass;
+
   // Modified weak_ptr-based singleton - to allow safe calls from destructors.
   // Thread-safe.
-  // Creates a just one Destination_t instance, and use Destination_t::send function
+  // Creates just one Destination_t instance, and use Destination_t::send function
   // to redirect data from single thread.
+  // Destination_t requirements:
+  // - default-constructible;
+  // - should provide Destination_t::Data move-constructible type;
+  // - should provide void send(Destination_t::Data &&) function.
   template<typename Destination_t>
   class Dispatcher
   {
@@ -23,6 +31,8 @@ namespace StateReportable::core
 
     static_assert(std::is_default_constructible_v<Destination_t>);
     static_assert(std::is_move_constructible_v<Data>);
+
+    friend class DispatcherTestClass<Destination>;
 
     ~Dispatcher() = default;
 
@@ -40,7 +50,8 @@ namespace StateReportable::core
                               &My_t::dispatch,
                               this,
                               std::ref(m_exchanger),
-                              std::ref(m_stop)
+                              std::ref(m_stop),
+                              std::ref(m_destination)
         )),
         m_scopeGuard{this, [this](void *) { m_stop = true; }}
     {};
@@ -50,11 +61,13 @@ namespace StateReportable::core
     using Storage = std::vector<Data>;
     using Exchanger = std::pair<std::mutex, Storage>;
 
-    void dispatch(Exchanger &exchanger, std::atomic<bool> &stop);
+    void dispatch(Exchanger &exchanger, std::atomic<bool> &stop, Destination &destination);
 
-    // Order is important!
+    // Order of member variables is important!
     Exchanger m_exchanger;
     std::atomic<bool> m_stop = false;
+    // Should be used in dispatch function only, and in tests via DispatcherTest
+    Destination m_destination;
     std::future<void> m_thread;
     // to set m_stop to true
     std::unique_ptr<void, std::function<void (void *)>> m_scopeGuard;
@@ -82,10 +95,9 @@ namespace StateReportable::core
 
 
   template<typename Destination_t>
-  void Dispatcher<Destination_t>::dispatch(Exchanger &exchanger, std::atomic<bool> &stop)
+  void Dispatcher<Destination_t>::dispatch(Exchanger &exchanger, std::atomic<bool> &stop, Destination &destination)
   {
     std::vector<Data> localStorage;
-    Destination destination;
 
     auto grabExchangerToLocal = [&localStorage](auto &exch)
     {
