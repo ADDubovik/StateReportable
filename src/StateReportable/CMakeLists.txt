@@ -14,7 +14,6 @@ set(SRC_CORE
 set(SRC_TO_FILE
 	ReporterToFile.cpp
 	ReporterToFile.h
-	StateToFile.cpp
 	StateToFile.h
 	StateToFileConfigReader.cpp
 	StateToFileConfigReader.h
