@@ -15,9 +15,9 @@ namespace StateReportable
     using Base = core::StateBase<State_t, Duration_t>;
 
     explicit StateToFile(const State_t state)
-        : State<State_t, Duration_t>(
+        : Base(
           state,
-          [weak = Dispatcher::instance_weak()](core::ReportLine &&line)
+          [weak = Dispatcher::instanceWeak()](core::ReportLine &&line)
           {
             if ( auto strong = weak.lock() )
               strong->send(std::move(line));
