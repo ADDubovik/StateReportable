@@ -1,16 +1,14 @@
 project(StateReportable)
 
 set(SRC_CORE
-	core/Dispatcher.cpp
 	core/Dispatcher.h
+	core/DispatcherImplementation.h
 	core/ReportLine.cpp
 	core/ReportLine.h
 	core/split.cpp
 	core/split.h
 	core/StateBase.h
 	core/TemplateHelpers.h
-	core/TestDestination.cpp
-	core/TestDestination.h
 )
 
 set(SRC_TO_FILE

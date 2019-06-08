@@ -1,8 +1,8 @@
 #include "ReporterToFile.h"
 #include "StateToFileConfigReader.h"
+#include "core/DispatcherImplementation.h"
 
 #include <filesystem>
-
 
 
 namespace StateReportable
@@ -21,3 +21,12 @@ namespace StateReportable
       *m_file << line;
   }
 } // namespace StateReportable
+
+
+namespace
+{
+  void instantiateTemplateFunctions()
+  {
+    StateReportable::core::Dispatcher<StateReportable::ReporterToFile>::instanceWeak();
+  }
+} // namespace

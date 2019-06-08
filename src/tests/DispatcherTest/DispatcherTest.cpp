@@ -2,7 +2,7 @@
 
 #include "core/Dispatcher.h"
 #include "core/ReportLine.h"
-#include "core/TestDestination.h"
+#include "core/DispatcherImplementation.h"
 
 #include <vector>
 #include <algorithm>
@@ -11,15 +11,44 @@
 
 using namespace StateReportable;
 
+
+struct TestDestination
+{
+  using Data = core::ReportLine;
+  using Storage = std::vector<Data>;
+  using StorageWithMutex = std::pair<std::mutex, Storage>;
+
+  StorageWithMutex storageWithMutex;
+
+  void send(Data &&line)
+  {
+    std::lock_guard<std::mutex> guard(storageWithMutex.first);
+    if ( storageWithMutex.second.size() == storageWithMutex.second.capacity() )
+      storageWithMutex.second.reserve(std::max(1u, storageWithMutex.second.size() * 2));
+
+    storageWithMutex.second.emplace_back(std::move(line));
+  }
+};
+
+
+namespace
+{
+  void instantiateTemplateFunctions()
+  {
+    core::Dispatcher<TestDestination>::instanceWeak();
+  }
+} // namespace
+
+
 namespace StateReportable::core
 {
   template<typename Destination_t>
   class DispatcherTestClass
   {
   public:
-    using Dispatcher = core::Dispatcher<core::TestDestination>;
+    using Dispatcher = core::Dispatcher<TestDestination>;
 
-    static core::TestDestination& getTestDestination()
+    static TestDestination& getTestDestination()
     {
       return Dispatcher::instanceWeak().lock()->m_destination;
     };
@@ -48,10 +77,10 @@ core::ReportLine getReportLineRandom()
 
 TEST(DispatcherTest, Test_01)
 {
-  core::TestDestination::Storage expected = {getReportLineRandom()};
-  auto &globalStorage = core::DispatcherTestClass<core::TestDestination>::getTestDestination().storageWithMutex;
+  TestDestination::Storage expected = {getReportLineRandom()};
+  auto &globalStorage = core::DispatcherTestClass<TestDestination>::getTestDestination().storageWithMutex;
 
-  if ( auto strong = core::Dispatcher<core::TestDestination>::instanceWeak().lock() )
+  if ( auto strong = core::Dispatcher<TestDestination>::instanceWeak().lock() )
     strong->send(core::ReportLine(*expected.cbegin()));
   else
     EXPECT_TRUE(false);
@@ -77,8 +106,8 @@ TEST(DispatcherTest, Test_02)
 {
   const auto lines = 10'000;
 
-  core::TestDestination::Storage expected;
-  auto &globalStorage = core::DispatcherTestClass<core::TestDestination>::getTestDestination().storageWithMutex;
+  TestDestination::Storage expected;
+  auto &globalStorage = core::DispatcherTestClass<TestDestination>::getTestDestination().storageWithMutex;
 
   for ( auto i = 0; i < lines; ++i )
   {
@@ -88,7 +117,7 @@ TEST(DispatcherTest, Test_02)
     expected.emplace_back(getReportLineRandom());
   }
 
-  if ( auto strong = core::Dispatcher<core::TestDestination>::instanceWeak().lock() )
+  if ( auto strong = core::Dispatcher<TestDestination>::instanceWeak().lock() )
     for ( auto const &elem : expected )
       strong->send(core::ReportLine(elem));
   else
@@ -115,9 +144,9 @@ TEST(DispatcherTest, Test_02)
 }
 
 
-void sendSome(core::TestDestination::Storage::const_iterator begin, core::TestDestination::Storage::const_iterator end)
+void sendSome(TestDestination::Storage::const_iterator begin, TestDestination::Storage::const_iterator end)
 {
-  if ( auto strong = core::Dispatcher<core::TestDestination>::instanceWeak().lock() )
+  if ( auto strong = core::Dispatcher<TestDestination>::instanceWeak().lock() )
     for ( auto iter = begin; iter != end; ++iter )
     {
       strong->send(core::ReportLine(*iter));
@@ -130,8 +159,8 @@ void sendSome(core::TestDestination::Storage::const_iterator begin, core::TestDe
 
 void test(size_t reportBySingleThread, size_t reporterThreads)
 {
-  core::TestDestination::Storage expected;
-  auto &globalStorage = core::DispatcherTestClass<core::TestDestination>::getTestDestination().storageWithMutex;
+  TestDestination::Storage expected;
+  auto &globalStorage = core::DispatcherTestClass<TestDestination>::getTestDestination().storageWithMutex;
 
   for ( size_t i = 0u; i < reportBySingleThread * reporterThreads; ++i )
   {
