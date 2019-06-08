@@ -39,6 +39,8 @@ namespace StateReportable
   public:
     bool operator==(const ReportLine &oth) const { return rank() == oth.rank(); };
     bool operator!=(const ReportLine &oth) const { return rank() != oth.rank(); };
+    bool operator<(const ReportLine &oth)  const { return rank() <  oth.rank(); };
+    bool operator>(const ReportLine &oth)  const { return rank() >  oth.rank(); };
   };
 
   std::ostream &operator<<(std::ostream &stream, const StateReportable::ReportLine &reportLine);
