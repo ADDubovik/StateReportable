@@ -6,25 +6,25 @@
 #include <optional>
 
 
-namespace StateReportable
+namespace StateReportable::toFile
 {
-  class ReporterToFile
+  class Reporter
   {
   public:
     using Data = core::ReportLine;
 
-    ReporterToFile();
-    ~ReporterToFile() = default;
+    Reporter();
+    ~Reporter() = default;
 
-    ReporterToFile(const ReporterToFile &) = delete;
-    ReporterToFile(ReporterToFile &&) = delete;
+    Reporter(const Reporter &) = delete;
+    Reporter(Reporter &&) = delete;
 
-    ReporterToFile& operator=(const ReporterToFile &) = delete;
-    ReporterToFile& operator=(ReporterToFile &&) = delete;
+    Reporter& operator=(const Reporter &) = delete;
+    Reporter& operator=(Reporter &&) = delete;
 
     void send(Data &&line);
 
   private:
     std::optional<std::ofstream> m_file;
   };
-} // namespace StateReportable
+} // namespace StateReportable::toFile

@@ -3,7 +3,7 @@
 #include <fstream>
 
 
-namespace StateReportable
+namespace StateReportable::toFile
 {
   std::optional<std::filesystem::path> readFilenameFromFile(const std::filesystem::path &configFileName)
   {
@@ -20,4 +20,4 @@ namespace StateReportable
     // TODO: add project-specific logging here
     return result;
   }
-} // namespace StateReportable
+} // namespace StateReportable::toFile

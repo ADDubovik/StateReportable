@@ -5,16 +5,16 @@
 #include "Reporter.h"
 
 
-namespace StateReportable
+namespace StateReportable::toFile
 {
   template <typename State_t, typename Duration_t = std::chrono::milliseconds>
-  class StateToFile : public core::StateBase<State_t, Duration_t>
+  class State : public core::StateBase<State_t, Duration_t>
   {
   public:
-    using Dispatcher = core::Dispatcher<ReporterToFile>;
+    using Dispatcher = core::Dispatcher<Reporter>;
     using Base = core::StateBase<State_t, Duration_t>;
 
-    explicit StateToFile(const State_t state)
+    explicit State(const State_t state)
         : Base(
           state,
           [weak = Dispatcher::instanceWeak()](core::ReportLine &&line)
@@ -24,17 +24,17 @@ namespace StateReportable
           }
         )
     {}
-    ~StateToFile() = default;
+    ~State() = default;
 
-    StateToFile(const StateToFile &) = delete;
-    StateToFile(StateToFile &&) = default;
-    StateToFile &operator=(const StateToFile &) = delete;
-    StateToFile &operator=(StateToFile &&) = default;
+    State(const State &) = delete;
+    State(State &&) = default;
+    State &operator=(const State &) = delete;
+    State &operator=(State &&) = default;
 
-    StateToFile<State_t, Duration_t> &operator=(const State_t state)
+    State<State_t, Duration_t> &operator=(const State_t state)
     {
       static_cast<Base &>(*this) = state;
       return *this;
     };
   };
-} // namespace StateReportable
+} // namespace StateReportable::toFile

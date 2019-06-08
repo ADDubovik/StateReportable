@@ -108,8 +108,8 @@ namespace calculating
 
 void run(std::atomic<bool> &interrupted)
 {
-  using StateReportableHttps = StateReportable::StateToFile<connection::https_state>;
-  using StateReportableCalculating = StateReportable::StateToFile<calculating::calc_state>;
+  using StateReportableHttps = StateReportable::toFile::State<connection::https_state>;
+  using StateReportableCalculating = StateReportable::toFile::State<calculating::calc_state>;
 
   using HttpsUnique = std::unique_ptr<StateReportableHttps>;
   using CalculatingUnique = std::unique_ptr<StateReportableCalculating>;

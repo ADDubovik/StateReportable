@@ -21,10 +21,13 @@ public:
 };
 
 
+using namespace StateReportable;
+
+
 TEST(StateToFileConfigReaderTest, Test_01)
 {
   EXPECT_NO_THROW(
-    auto result = StateReportable::readFilenameFromFile("test.config");
+    auto result = toFile::readFilenameFromFile("test.config");
     EXPECT_FALSE(result);
   );
 }
@@ -34,7 +37,7 @@ TEST(StateToFileConfigReaderTest, Test_02)
 {
   EXPECT_NO_THROW(
     SettingsCreator_RAII creator;
-    auto result = StateReportable::readFilenameFromFile("test.config");
+    auto result = toFile::readFilenameFromFile("test.config");
     EXPECT_EQ(result, "StateReportable.output");
   );
 }
