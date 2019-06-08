@@ -1,5 +1,7 @@
 project(StateReportable)
 
+file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/StateReportable.config" "report.txt")
+
 set(SRC_CORE
 	core/Dispatcher.h
 	core/DispatcherImplementation.h
