@@ -43,3 +43,5 @@ STATE_REPORTABLE_ADD_TEST(StateToFileConfigTest StateToFileConfigTest/StateToFil
 	target_link_libraries(StateToFileConfigTest StateReportable_lib)
 STATE_REPORTABLE_ADD_TEST(ThreadSyncConceptTest ThreadSyncConceptTest/ThreadSyncConceptTest.cpp) 
 	target_link_libraries(ThreadSyncConceptTest StateReportable_lib)
+STATE_REPORTABLE_ADD_TEST(DispatcherTest DispatcherTest/DispatcherTest.cpp) 
+	target_link_libraries(DispatcherTest StateReportable_lib)

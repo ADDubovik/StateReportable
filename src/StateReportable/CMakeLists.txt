@@ -1,11 +1,13 @@
 project(StateReportable)
 
 set(SRC
+	Dispatcher.h
 	ReportLine.cpp
 	ReportLine.h
 	split.cpp
 	split.h
 	StateBase.h
+	StateToFile.cpp
 	StateToFile.h
 	StateToFileConfig.cpp
 	StateToFileConfig.h
