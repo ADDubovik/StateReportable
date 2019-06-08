@@ -32,21 +32,21 @@ include_directories(
 )
 
 add_library(${PROJECT_NAME}_lib ${SRC})
-add_executable(${PROJECT_NAME} main.cpp)
+add_executable(${PROJECT_NAME}_demo demo.cpp)
 
-target_compile_options(${PROJECT_NAME} PRIVATE -DPROJECT_NAME="${PROJECT_NAME}" -DPROJECT_NAME_W=L"${PROJECT_NAME}")
+target_compile_options(${PROJECT_NAME}_demo PRIVATE -DPROJECT_NAME="${PROJECT_NAME}" -DPROJECT_NAME_W=L"${PROJECT_NAME}")
 
 
 add_dependencies(
-	${PROJECT_NAME}
+	${PROJECT_NAME}_demo
 	${PROJECT_NAME}_lib
 )
 
-target_link_libraries(${PROJECT_NAME}
+target_link_libraries(${PROJECT_NAME}_demo
 	${PROJECT_NAME}_lib
 )
 
-set_property(TARGET ${PROJECT_NAME} PROPERTY FOLDER "StateReportable")
+set_property(TARGET ${PROJECT_NAME}_demo PROPERTY FOLDER "StateReportable")
 set_property(TARGET ${PROJECT_NAME}_lib PROPERTY FOLDER "StateReportable")
 
-INSTALL(TARGETS ${PROJECT_NAME} DESTINATION .)
+INSTALL(TARGETS ${PROJECT_NAME}_demo DESTINATION .)
