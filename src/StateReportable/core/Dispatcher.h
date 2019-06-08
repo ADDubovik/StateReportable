@@ -12,7 +12,8 @@ namespace StateReportable::core
 {
   // Modified weak_ptr-based singleton - to allow safe calls from destructors.
   // Thread-safe.
-  // Data is redirecting from single thread to Destination_t::send.
+  // Creates a just one Destination_t instance, and use Destination_t::send function
+  // to redirect data from single thread.
   template<typename Data_t, typename Destination_t>
   class Dispatcher
   {
