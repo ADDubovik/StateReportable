@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 
 #include "core/Dispatcher.h"
+#include "core/TestDestination.h"
 
 #include <memory>
 #include <functional>
@@ -12,14 +13,6 @@
 
 
 using namespace StateReportable;
-
-
-struct TestDestination
-{
-  using Data = double;
-
-  void send(Data &&) {}
-};
 
 
 using ScopeGuard = std::unique_ptr<int, std::function<void(int *)>>;
@@ -39,7 +32,7 @@ TEST(DispatcherWeakSingletonTest, Test_01)
   // - longLiveGuard
   ScopeGuard guard(
       &i,
-      [weak = core::Dispatcher<TestDestination>::instanceWeak()](int *)
+      [weak = core::Dispatcher<core::TestDestination>::instanceWeak()](int *)
       {
         std::cout << "OK" << std::endl;
         EXPECT_FALSE(weak.lock());

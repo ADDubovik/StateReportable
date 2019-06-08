@@ -1,6 +1,7 @@
 project(StateReportable)
 
 set(SRC_CORE
+	core/Dispatcher.cpp
 	core/Dispatcher.h
 	core/ReportLine.cpp
 	core/ReportLine.h
@@ -8,6 +9,8 @@ set(SRC_CORE
 	core/split.h
 	core/StateBase.h
 	core/TemplateHelpers.h
+	core/TestDestination.cpp
+	core/TestDestination.h
 )
 
 set(SRC_TO_FILE
