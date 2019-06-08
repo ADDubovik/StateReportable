@@ -5,6 +5,7 @@
 #include <future>
 #include <thread>
 #include <mutex>
+#include <type_traits>
 
 
 namespace StateReportable
@@ -15,6 +16,9 @@ namespace StateReportable
   template<typename Data_t, typename Destination_t>
   class Dispatcher
   {
+    static_assert(std::is_default_constructible_v<Destination_t>);
+    static_assert(std::is_move_constructible_v<Data_t>);
+
   public:
     using Data = Data_t;
     using Destination = Destination_t;
@@ -28,7 +32,7 @@ namespace StateReportable
 
     static std::weak_ptr<Dispatcher> instanceWeak();
 
-    void send(Data &&line);
+    void send(Data &&data);
   private:
     Dispatcher()
         : m_thread(std::async(std::launch::async,
@@ -62,6 +66,17 @@ namespace StateReportable
     // new needed and no std::make_shared because of private c-tor
     static auto inst = std::shared_ptr<My_t>(new My_t());
     return inst;
+  }
+
+
+  template<typename Data_t, typename Destination_t>
+  void Dispatcher<Data_t, Destination_t>::send(Data &&data)
+  {
+    std::lock_guard<std::mutex> guard(m_exchanger.first);
+    if ( m_exchanger.second.size() == m_exchanger.second.capacity() )
+      m_exchanger.second.reserve(std::max(static_cast<size_t>(1u), m_exchanger.second.size() * 2));
+
+    m_exchanger.second.emplace_back(std::move(data));
   }
 
 
