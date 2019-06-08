@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "StateToFileConfig.h"
+#include "StateToFileConfigReader.h"
 
 #include <fstream>
 
@@ -21,7 +21,7 @@ public:
 };
 
 
-TEST(StateToFileConfigTest, Test_01)
+TEST(StateToFileConfigReaderTest, Test_01)
 {
   EXPECT_NO_THROW(
     auto result = StateReportable::readFilenameFromFile("test.config");
@@ -30,7 +30,7 @@ TEST(StateToFileConfigTest, Test_01)
 }
 
 
-TEST(StateToFileConfigTest, Test_02)
+TEST(StateToFileConfigReaderTest, Test_02)
 {
   EXPECT_NO_THROW(
     SettingsCreator_RAII creator;

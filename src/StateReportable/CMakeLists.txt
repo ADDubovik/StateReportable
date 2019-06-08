@@ -9,8 +9,8 @@ set(SRC
 	core/StateBase.h
 	StateToFile.cpp
 	StateToFile.h
-	StateToFileConfig.cpp
-	StateToFileConfig.h
+	StateToFileConfigReader.cpp
+	StateToFileConfigReader.h
 	core/TemplateHelpers.h
 )
 
