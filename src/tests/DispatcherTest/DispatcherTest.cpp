@@ -48,8 +48,8 @@ core::ReportLine getReportLineRandom()
 TEST(DispatcherTest, Test_01)
 {
   Storage expected = {getReportLineRandom()};
-  if ( auto lock = core::Dispatcher<core::ReportLine, TestDestination>::instanceWeak().lock() )
-    lock->send(core::ReportLine(*expected.cbegin()));
+  if ( auto strong = core::Dispatcher<core::ReportLine, TestDestination>::instanceWeak().lock() )
+    strong->send(core::ReportLine(*expected.cbegin()));
   else
     EXPECT_TRUE(false);
 
@@ -73,9 +73,9 @@ TEST(DispatcherTest, Test_02)
     expected.emplace_back(getReportLineRandom());
   }
 
-  if ( auto lock = core::Dispatcher<core::ReportLine, TestDestination>::instanceWeak().lock() )
+  if ( auto strong = core::Dispatcher<core::ReportLine, TestDestination>::instanceWeak().lock() )
     for ( auto const &elem : expected )
-      lock->send(core::ReportLine(elem));
+      strong->send(core::ReportLine(elem));
   else
     EXPECT_TRUE(false);
 
@@ -93,10 +93,10 @@ TEST(DispatcherTest, Test_02)
 
 void sendSome(Storage::const_iterator begin, Storage::const_iterator end)
 {
-  if ( auto lock = core::Dispatcher<core::ReportLine, TestDestination>::instanceWeak().lock() )
+  if ( auto strong = core::Dispatcher<core::ReportLine, TestDestination>::instanceWeak().lock() )
     for ( auto iter = begin; iter != end; ++iter )
     {
-      lock->send(core::ReportLine(*iter));
+      strong->send(core::ReportLine(*iter));
       std::this_thread::yield();
     }
   else

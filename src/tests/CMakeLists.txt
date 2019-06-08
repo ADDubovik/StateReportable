@@ -45,3 +45,5 @@ STATE_REPORTABLE_ADD_TEST(ThreadSyncConceptTest ThreadSyncConceptTest/ThreadSync
 	target_link_libraries(ThreadSyncConceptTest StateReportable_lib)
 STATE_REPORTABLE_ADD_TEST(DispatcherTest DispatcherTest/DispatcherTest.cpp) 
 	target_link_libraries(DispatcherTest StateReportable_lib)
+STATE_REPORTABLE_ADD_TEST(DispatcherWeakSingletonTest DispatcherWeakSingletonTest/DispatcherWeakSingletonTest.cpp) 
+	target_link_libraries(DispatcherWeakSingletonTest StateReportable_lib)
