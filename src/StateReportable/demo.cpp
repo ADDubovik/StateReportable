@@ -114,8 +114,8 @@ void run(std::atomic<bool> &interrupted)
   using HttpsUnique = std::unique_ptr<StateReportableHttps>;
   using CalculatingUnique = std::unique_ptr<StateReportableCalculating>;
 
-  std::vector<HttpsUnique> httpss(100);
-  std::vector<CalculatingUnique> calcs(100);
+  std::vector<HttpsUnique> httpss(20);
+  std::vector<CalculatingUnique> calcs(20);
 
   while ( !interrupted )
   {
@@ -149,7 +149,7 @@ void run(std::atomic<bool> &interrupted)
         elem.reset();
     }
 
-    std::this_thread::sleep_for(std::chrono::milliseconds(1));
+    std::this_thread::sleep_for(std::chrono::milliseconds(10));
   }
 }
 
