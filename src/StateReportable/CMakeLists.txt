@@ -48,4 +48,8 @@ target_link_libraries(${PROJECT_NAME}_toFile_demo
 set_property(TARGET ${PROJECT_NAME}_toFile_demo PROPERTY FOLDER "StateReportable")
 set_property(TARGET ${PROJECT_NAME}_lib PROPERTY FOLDER "StateReportable")
 
+source_group("core"   FILES ${SRC_CORE})
+source_group("toFile" FILES ${SRC_TO_FILE})
+
+
 INSTALL(TARGETS ${PROJECT_NAME}_toFile_demo DESTINATION .)
