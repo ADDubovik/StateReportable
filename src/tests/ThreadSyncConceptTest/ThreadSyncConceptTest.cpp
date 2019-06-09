@@ -53,7 +53,7 @@ void report(size_t startFrom, size_t howMuch, Exchanger &exchanger)
     {
       std::lock_guard<std::mutex> guard(exchanger.first);
       if ( exchanger.second.size() == exchanger.second.capacity() )
-        exchanger.second.reserve(std::max(static_cast<size_t>(1u), exchanger.second.size() * 2));
+        exchanger.second.reserve(std::max<size_t>(1u, exchanger.second.size() * 2));
 
       exchanger.second.emplace_back(startFrom + i);
     }

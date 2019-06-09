@@ -27,7 +27,7 @@ namespace StateReportable::core
       {
         // Optimization
         if ( result.size() == result.capacity() )
-          result.reserve(std::max(1u, result.size() * 2));
+          result.reserve(std::max<size_t>(1u, result.size() * 2));
 
         result.emplace_back(std::move(buf));
       }

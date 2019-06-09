@@ -24,7 +24,7 @@ struct TestDestination
   {
     std::lock_guard<std::mutex> guard(storageWithMutex.first);
     if ( storageWithMutex.second.size() == storageWithMutex.second.capacity() )
-      storageWithMutex.second.reserve(std::max(1u, storageWithMutex.second.size() * 2));
+      storageWithMutex.second.reserve(std::max<size_t>(1u, storageWithMutex.second.size() * 2));
 
     storageWithMutex.second.emplace_back(std::move(line));
   }
@@ -112,7 +112,7 @@ TEST(DispatcherTest, Test_02)
   for ( auto i = 0; i < lines; ++i )
   {
     if ( expected.size() == expected.capacity() )
-      expected.reserve(std::max(1u, expected.size() * 2));
+      expected.reserve(std::max<size_t>(1u, expected.size() * 2));
 
     expected.emplace_back(getReportLineRandom());
   }
@@ -165,7 +165,7 @@ void test(size_t reportBySingleThread, size_t reporterThreads)
   for ( size_t i = 0u; i < reportBySingleThread * reporterThreads; ++i )
   {
     if ( expected.size() == expected.capacity() )
-      expected.reserve(std::max(1u, expected.size() * 2));
+      expected.reserve(std::max<size_t>(1u, expected.size() * 2));
 
     expected.emplace_back(getReportLineRandom());
   }      

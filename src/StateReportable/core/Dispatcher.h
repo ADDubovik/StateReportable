@@ -80,7 +80,7 @@ namespace StateReportable::core
   {
     std::lock_guard<std::mutex> guard(m_exchanger.first);
     if ( m_exchanger.second.size() == m_exchanger.second.capacity() )
-      m_exchanger.second.reserve(std::max(static_cast<size_t>(1u), m_exchanger.second.size() * 2));
+      m_exchanger.second.reserve(std::max<size_t>(1u, m_exchanger.second.size() * 2));
 
     m_exchanger.second.emplace_back(std::move(data));
   }
@@ -97,7 +97,7 @@ namespace StateReportable::core
       for ( auto &&elem : exch.second )
       {
         if ( localStorage.size() == localStorage.capacity() )
-          localStorage.reserve(std::max(1u, localStorage.size() * 2));
+          localStorage.reserve(std::max<size_t>(1u, localStorage.size() * 2));
 
         localStorage.emplace_back(std::move(elem));
       }
