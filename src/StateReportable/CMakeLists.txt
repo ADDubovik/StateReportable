@@ -9,6 +9,9 @@ set(SRC_CORE
 	core/ReportLine.h
 	core/split.cpp
 	core/split.h
+	#core/Statistician.cpp
+	#core/Statistician.h
+	core/StatLine.h
 	core/StateBase.h
 	core/TemplateHelpers.h
 )
