@@ -18,8 +18,9 @@ int main(int argc, char *argv[])
   {
     std::string str;
     std::getline(file, str);
-    auto reportLine = StateReportable::core::convertToReportLine(str);
-    std::cout << *reportLine << std::endl;
+
+    if ( auto reportLine = StateReportable::core::convertToReportLine(str) )
+      std::cout << *reportLine << std::endl;
   }
 
   return 0;
