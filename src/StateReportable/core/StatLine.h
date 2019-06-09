@@ -22,6 +22,8 @@ namespace StateReportable::core
     StatLine() = delete;
 
     StatLine(T duration) : pcs(1), min(duration), max(duration), total(duration) {};
+    // For use in tests
+    StatLine(uint64_t pcs_, T min_, T max_, T total_) : pcs(pcs_), min(min_), max(max_), total(total_) {};
     ~StatLine() = default;
 
     StatLine(const StatLine &) = default;

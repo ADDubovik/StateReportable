@@ -49,3 +49,5 @@ STATE_REPORTABLE_ADD_TEST(DispatcherWeakSingletonTest DispatcherWeakSingletonTes
 	target_link_libraries(DispatcherWeakSingletonTest StateReportable_lib)
 STATE_REPORTABLE_ADD_TEST(StatLineTest StatLineTest/StatLineTest.cpp) 
 	target_link_libraries(StatLineTest StateReportable_lib)
+STATE_REPORTABLE_ADD_TEST(calcStatTest calcStatTest/calcStatTest.cpp) 
+	target_link_libraries(calcStatTest StateReportable_lib)

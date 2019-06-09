@@ -17,6 +17,8 @@ namespace StateReportable::core
 
   using RawStat = std::vector<ReportLine>;
 
+  FullStat calcStat(const RawStat &rawStat);
+
   FullStat calcStat(RawStat::const_iterator first, RawStat::const_iterator last);
 
 

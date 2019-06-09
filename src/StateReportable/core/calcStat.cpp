@@ -5,6 +5,11 @@
 
 namespace StateReportable::core
 {
+  FullStat calcStat(const RawStat &rawStat)
+  {
+    return calcStat(rawStat.cbegin(), rawStat.cend());
+  }
+
   FullStat calcStat(RawStat::const_iterator first, RawStat::const_iterator last)
   {
     FullStat result;
@@ -45,7 +50,7 @@ namespace StateReportable::core
                 << inner->second;
 
         // To avoid unnecessary line feed at the end of processing
-        if ( outerCounter != outer->second.size() || innerCounter != outer->second.size() )
+        if ( outerCounter != fullStat.size() || innerCounter != outer->second.size() )
           stream << "\n";
       }
     }
