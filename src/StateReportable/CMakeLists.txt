@@ -11,6 +11,7 @@ set(SRC_CORE
 	core/ReportLine.h
 	core/split.cpp
 	core/split.h
+	core/StatLine.cpp
 	core/StatLine.h
 	core/StateBase.h
 	core/TemplateHelpers.h

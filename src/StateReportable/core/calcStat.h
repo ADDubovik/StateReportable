@@ -11,7 +11,7 @@
 namespace StateReportable::core
 {
   // Key is pair of states - from-state and to-state
-  using TransitionsStat = std::map<std::pair<std::string, std::string>, StatLine<typename ReportLine::Duration>>;
+  using TransitionsStat = std::map<std::pair<std::string, std::string>, StatLine>;
   // Key is type name
   using FullStat = std::map<std::string, TransitionsStat>;
 
