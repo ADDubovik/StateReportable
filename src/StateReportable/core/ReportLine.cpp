@@ -6,12 +6,12 @@ namespace StateReportable::core
 {
   const char separator = '\t';
 
-  ReportLine convertToReportLine(const std::string &str)
+  std::optional<ReportLine> convertToReportLine(const std::string &str)
   {
     auto splitted = split(str, separator);
 
     if ( splitted.size() != 4u )
-      throw std::runtime_error(std::string("Incorrect string in ") + __FUNCTION__);
+      return std::nullopt;
 
     return ReportLine(std::move(splitted[0]),
                       std::move(splitted[1]),

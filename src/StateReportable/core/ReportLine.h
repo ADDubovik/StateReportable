@@ -2,6 +2,7 @@
 
 #include <ostream>
 #include <string>
+#include <optional>
 
 
 namespace StateReportable::core
@@ -48,6 +49,6 @@ namespace StateReportable::core
   std::ostream &operator<<(std::ostream &stream, const ReportLine &reportLine);
 
   // Converts str to ReportLine.
-  // Throws an exception if str is not consistent.
-  ReportLine convertToReportLine(const std::string &str);
+  // Returns std::nullopt if str is not consistent.
+  std::optional<ReportLine> convertToReportLine(const std::string &str);
 } // namespace StateReportable::core

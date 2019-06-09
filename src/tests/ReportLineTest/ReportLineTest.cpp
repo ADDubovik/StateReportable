@@ -36,6 +36,19 @@ TEST(ReportLineTest, Test_03)
     auto result = core::convertToReportLine(buf.str());
     EXPECT_EQ(result, expected);
   );
+
+  EXPECT_NO_THROW(
+    EXPECT_FALSE(core::convertToReportLine("kfgasj\tkjtfhkls\tjfhgjks\tjshsdklh\t2543"));
+  );
+  EXPECT_NO_THROW(
+    EXPECT_FALSE(core::convertToReportLine("kfgasj\tkjtfhkls\tjfhgjks"));
+  );
+  EXPECT_NO_THROW(
+    EXPECT_FALSE(core::convertToReportLine("kfgasjkjtfhklsjfhgjks"));
+  );
+  EXPECT_NO_THROW(
+    EXPECT_FALSE(core::convertToReportLine(""));
+  );
 }
 
 
