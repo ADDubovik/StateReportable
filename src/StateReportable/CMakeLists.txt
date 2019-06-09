@@ -70,4 +70,5 @@ source_group("toFile" FILES ${SRC_TO_FILE})
 
 
 INSTALL(TARGETS ${PROJECT_NAME}_toFile_demo DESTINATION .)
+INSTALL(FILES toFile/StateReportable.config DESTINATION .)
 INSTALL(TARGETS ${PROJECT_NAME}_toFile_statMaker DESTINATION .)
