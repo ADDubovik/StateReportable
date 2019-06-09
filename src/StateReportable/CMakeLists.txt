@@ -3,14 +3,14 @@ project(StateReportable)
 file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/StateReportable.config" "report.txt")
 
 set(SRC_CORE
+	core/calcStat.cpp
+	core/calcStat.h
 	core/Dispatcher.h
 	core/DispatcherImplementation.h
 	core/ReportLine.cpp
 	core/ReportLine.h
 	core/split.cpp
 	core/split.h
-	#core/Statistician.cpp
-	#core/Statistician.h
 	core/StatLine.h
 	core/StateBase.h
 	core/TemplateHelpers.h

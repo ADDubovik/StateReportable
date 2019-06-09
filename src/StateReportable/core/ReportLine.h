@@ -9,10 +9,12 @@ namespace StateReportable::core
   // Represents one line of the report
   struct ReportLine
   {
+    using Duration = long long;
+
     std::string typeName;
     std::string stateFrom;
     std::string stateTo;
-    long long duration;
+    Duration duration;
 
     ReportLine() = delete;
 

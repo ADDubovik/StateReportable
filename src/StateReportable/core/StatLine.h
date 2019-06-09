@@ -2,6 +2,8 @@
 
 #include <cstdint>
 #include <type_traits>
+#include <ostream>
+#include <algorithm>
 
 
 namespace StateReportable::core
