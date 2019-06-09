@@ -4,6 +4,8 @@
 // Tests a concept of synchonizing messages transfer from a lot of reporter threads
 // to a signle collector thread
 
+#include "core/VectorHelpers.h"
+
 
 #include <atomic>
 #include <future>
@@ -52,9 +54,7 @@ void report(size_t startFrom, size_t howMuch, Exchanger &exchanger)
   {
     {
       std::lock_guard<std::mutex> guard(exchanger.first);
-      if ( exchanger.second.size() == exchanger.second.capacity() )
-        exchanger.second.reserve(std::max<size_t>(1u, exchanger.second.size() * 2));
-
+      VectorHelpers::doubleCapacityIfNeeded(exchanger.second);
       exchanger.second.emplace_back(startFrom + i);
     }
 

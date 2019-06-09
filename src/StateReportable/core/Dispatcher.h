@@ -1,5 +1,7 @@
 #pragma once
 
+#include "VectorHelpers.h"
+
 #include <memory>
 #include <atomic>
 #include <future>
@@ -79,9 +81,7 @@ namespace StateReportable::core
   void Dispatcher<Destination_t>::send(Data &&data)
   {
     std::lock_guard<std::mutex> guard(m_exchanger.first);
-    if ( m_exchanger.second.size() == m_exchanger.second.capacity() )
-      m_exchanger.second.reserve(std::max<size_t>(1u, m_exchanger.second.size() * 2));
-
+    VectorHelpers::doubleCapacityIfNeeded(m_exchanger.second);
     m_exchanger.second.emplace_back(std::move(data));
   }
 
@@ -96,9 +96,7 @@ namespace StateReportable::core
       std::lock_guard<std::mutex> guard(exch.first);
       for ( auto &&elem : exch.second )
       {
-        if ( localStorage.size() == localStorage.capacity() )
-          localStorage.reserve(std::max<size_t>(1u, localStorage.size() * 2));
-
+        VectorHelpers::doubleCapacityIfNeeded(localStorage);
         localStorage.emplace_back(std::move(elem));
       }
       exch.second.clear();

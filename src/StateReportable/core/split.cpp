@@ -1,4 +1,5 @@
 #include "split.h"
+#include "VectorHelpers.h"
 
 #include <cstring>
 #include <algorithm>
@@ -25,10 +26,7 @@ namespace StateReportable::core
 
       if ( !buf.empty() )
       {
-        // Optimization
-        if ( result.size() == result.capacity() )
-          result.reserve(std::max<size_t>(1u, result.size() * 2));
-
+        VectorHelpers::doubleCapacityIfNeeded(result);
         result.emplace_back(std::move(buf));
       }
     }

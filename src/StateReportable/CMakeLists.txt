@@ -15,6 +15,7 @@ set(SRC_CORE
 	core/StatLine.h
 	core/StateBase.h
 	core/TemplateHelpers.h
+	core/VectorHelpers.h
 )
 
 set(SRC_TO_FILE
