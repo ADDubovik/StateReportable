@@ -5,8 +5,9 @@
 #include <thread>
 #include <chrono>
 #include <iostream>
-#include <cstdlib>
 #include <memory>
+#include <random>
+
 
 // Ctrl-C flag
 static std::atomic<bool> interrupted = false;
@@ -117,16 +118,21 @@ void run(std::atomic<bool> &interrupted)
   HttpsUnique https;
   CalculatingUnique calc;
 
+  std::random_device rd;
+  std::mt19937 gen(rd());
+  std::uniform_int_distribution<> resetDistribution(0, 0xfff);
+  std::uniform_int_distribution<> nextDistribution(0, 0xf);
+
   while ( !interrupted )
   {
     {
       if ( !https )
         https = std::make_unique<StateReportableHttps>(connection::getFirst());
 
-      if ( https && ((rand() & 0xfff) == 0) )
+      if ( https && (resetDistribution(gen) == 0) )
         https.reset();
 
-      if ( https && ((rand() & 0xf) == 0) )
+      if ( https && (nextDistribution(gen) == 0) )
         *https = connection::next(*https);
 
       if ( https && connection::isLast(*https) )
@@ -137,10 +143,10 @@ void run(std::atomic<bool> &interrupted)
       if ( !calc )
         calc = std::make_unique<StateReportableCalculating>(calculating::getFirst());
 
-      if ( calc && ((rand() & 0xfff) == 0) )
+      if ( calc && (resetDistribution(gen) == 0) )
         calc.reset();
 
-      if ( calc && ((rand() & 0xf) == 0) )
+      if ( calc && (nextDistribution(gen) == 0) )
         *calc = calculating::next(*calc);
 
       if ( calc && calculating::isLast(*calc) )
