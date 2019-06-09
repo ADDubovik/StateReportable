@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <type_traits>
 
 
 namespace StateReportable::core
@@ -9,6 +10,8 @@ namespace StateReportable::core
   template<typename T = long long>
   struct StatLine
   {
+    static_assert(std::is_arithmetic_v<T>);
+
     uint64_t pcs;
     T min;
     T max;
