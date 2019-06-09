@@ -9,7 +9,7 @@ using namespace StateReportable::core;
 
 TEST(calcStatTest, Test_01)
 {
-  RawStat rawStat;
+  std::vector<ReportLine> rawStat;
   EXPECT_NO_THROW(
     EXPECT_EQ(calcStat(rawStat), FullStat());
   );
@@ -22,7 +22,7 @@ TEST(calcStatTest, Test_01)
 
 TEST(calcStatTest, Test_02)
 {
-  RawStat rawStat = {{"enum Type::Type01", "state_from", "state_to", 300}};
+  std::vector<ReportLine> rawStat = {{"enum Type::Type01", "state_from", "state_to", 300}};
 
   FullStat expected = {
       {"enum Type::Type01", {{{"state_from", "state_to"}, {1u, 300, 300, 300}}}}
@@ -40,7 +40,7 @@ TEST(calcStatTest, Test_02)
 
 TEST(calcStatTest, Test_03)
 {
-  RawStat rawStat = {
+  std::vector<ReportLine> rawStat = {
       {"enum Type::Type01", "state_from", "state_to", 300},
       {"enum Type::Type01", "state_from", "state_to", 1000}
   };
@@ -61,7 +61,7 @@ TEST(calcStatTest, Test_03)
 
 TEST(calcStatTest, Test_04)
 {
-  RawStat rawStat = {
+  std::vector<ReportLine> rawStat = {
       {"enum Type::Type01", "state_from", "state_to", 300},
       {"enum Type::Type01", "state_from", "state_to", 1000},
       {"enum Type::Type01", "state_from", "state_to", 200}
@@ -83,7 +83,7 @@ TEST(calcStatTest, Test_04)
 
 TEST(calcStatTest, Test_05)
 {
-  RawStat rawStat = {
+  std::vector<ReportLine> rawStat = {
       {"enum Type::Type01", "state_from", "state_to", 300},
       {"enum Type::Type01", "state_from", "state_to", 1000},
       {"enum Type::Type01", "state_from", "state_to", 200},
@@ -108,7 +108,7 @@ TEST(calcStatTest, Test_05)
 
 TEST(calcStatTest, Test_06)
 {
-  RawStat rawStat = {
+  std::vector<ReportLine> rawStat = {
       {"enum Type::Type01", "state_from", "state_to", 300},
       {"enum Type::Type01", "state_from", "state_to", 1'000},
       {"enum Type::Type01", "state_from", "state_to", 200},
@@ -145,7 +145,7 @@ TEST(calcStatTest, Test_06)
 
 TEST(calcStatTest, Test_07)
 {
-  RawStat rawStat = {
+  std::vector<ReportLine> rawStat = {
       {"enum Type::Type01", "state_from", "state_1", 100},
       {"enum Type::Type01", "state_from", "state_2", 200},
       {"enum Type::Type01", "state_from", "state_3", 300},
