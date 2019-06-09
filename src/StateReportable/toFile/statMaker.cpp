@@ -1,8 +1,11 @@
 #include "Reporter.h"
+#include "core/VectorHelpers.h"
+#include "core/calcStat.h"
 
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <vector>
 
 
 int main(int argc, char *argv[])
@@ -14,14 +17,22 @@ int main(int argc, char *argv[])
   }
 
   std::ifstream file(argv[1]);
+  std::vector<StateReportable::core::ReportLine> rawStat;
   while ( !file.eof() )
   {
     std::string str;
     std::getline(file, str);
 
     if ( auto reportLine = StateReportable::core::convertToReportLine(str) )
-      std::cout << *reportLine << std::endl;
+    {
+      VectorHelpers::doubleCapacityIfNeeded(rawStat);
+      rawStat.emplace_back(*reportLine);
+    }
   }
+
+  auto stat = StateReportable::core::calcStat(rawStat);
+
+  std::cout << stat;
 
   return 0;
 }

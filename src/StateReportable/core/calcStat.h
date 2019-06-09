@@ -4,7 +4,6 @@
 #include "ReportLine.h"
 
 #include <map>
-#include <vector>
 #include <ostream>
 
 
