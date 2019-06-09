@@ -114,39 +114,37 @@ void run(std::atomic<bool> &interrupted)
   using HttpsUnique = std::unique_ptr<StateReportableHttps>;
   using CalculatingUnique = std::unique_ptr<StateReportableCalculating>;
 
-  std::vector<HttpsUnique> httpss(20);
-  std::vector<CalculatingUnique> calcs(20);
+  HttpsUnique https;
+  CalculatingUnique calc;
 
   while ( !interrupted )
   {
-    for ( auto &elem : httpss )
     {
-      if ( !elem )
-        elem = std::make_unique<StateReportableHttps>(connection::getFirst());
+      if ( !https )
+        https = std::make_unique<StateReportableHttps>(connection::getFirst());
 
-      if ( elem && ((rand() & 0xfff) == 0) )
-        elem.reset();
+      if ( https && ((rand() & 0xfff) == 0) )
+        https.reset();
 
-      if ( elem && ((rand() & 0xf) == 0) )
-        *elem = connection::next(*elem);
+      if ( https && ((rand() & 0xf) == 0) )
+        *https = connection::next(*https);
 
-      if ( elem && connection::isLast(*elem) )
-        elem.reset();
+      if ( https && connection::isLast(*https) )
+        https.reset();
     }
 
-    for ( auto &elem : calcs )
     {
-      if ( !elem )
-        elem = std::make_unique<StateReportableCalculating>(calculating::getFirst());
+      if ( !calc )
+        calc = std::make_unique<StateReportableCalculating>(calculating::getFirst());
 
-      if ( elem && ((rand() & 0xfff) == 0) )
-        elem.reset();
+      if ( calc && ((rand() & 0xfff) == 0) )
+        calc.reset();
 
-      if ( elem && ((rand() & 0xf) == 0) )
-        *elem = calculating::next(*elem);
+      if ( calc && ((rand() & 0xf) == 0) )
+        *calc = calculating::next(*calc);
 
-      if ( elem && calculating::isLast(*elem) )
-        elem.reset();
+      if ( calc && calculating::isLast(*calc) )
+        calc.reset();
     }
 
     std::this_thread::sleep_for(std::chrono::milliseconds(10));
@@ -168,8 +166,12 @@ int main()
   std::cout << "Writing demo StateReportable data with accordance to StateReportable.config" << std::endl;
   std::cout << "Press Ctrl-C to exit" << std::endl;
 
+  const auto threadsCount = 20;
   {
-    auto thread = std::async(std::launch::async, run, std::ref(interrupted));
+    std::vector<std::future<void>> threads(threadsCount);
+
+    for ( auto &elem : threads )
+      elem = std::async(std::launch::async, run, std::ref(interrupted));
   } // <--- will hang here until interrupted
 
   return 0;
