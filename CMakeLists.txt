@@ -20,6 +20,9 @@ PRINT_ALL_CMAKE_SETTINGS()
 
 add_subdirectory(src/StateReportable)
 
-enable_testing()
+option(BUILD_TESTS "Whether or not to build tests, gtest submodule is required" ON)
 
-add_subdirectory(src/tests)
+if (BUILD_TESTS)
+	enable_testing()
+	add_subdirectory(src/tests)
+endif()
