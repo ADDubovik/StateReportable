@@ -26,9 +26,11 @@ option(BUILD_TESTS "Whether or not to build tests, gtest submodule is required" 
 
 if(WIN32)
   set(ADDITIONAL_LIBS )
+	set(PTHREAD_LIB )
 else()
-	add_compile_options(-pthread)
-  set(ADDITIONAL_LIBS -std=c++17 -lstdc++fs -lpthread)
+	#add_compile_options(-pthread)
+	set(PTHREAD_LIB -lpthread)
+  set(ADDITIONAL_LIBS -std=c++17 -lstdc++fs)
 endif()
 
 

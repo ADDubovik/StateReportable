@@ -55,6 +55,7 @@ add_dependencies(
 )
 
 target_link_libraries(${PROJECT_NAME}_toFile_demo
+	${PTHREAD_LIB}
 	${PROJECT_NAME}_lib
 	${ADDITIONAL_LIBS}
 )
