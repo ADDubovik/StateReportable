@@ -1,6 +1,6 @@
 #include "Reporter.h"
 #include "ConfigReader.h"
-#include "core/DispatcherImplementation.h"
+#include "StateReportable/core/DispatcherImplementation.h"
 
 #include <filesystem>
 

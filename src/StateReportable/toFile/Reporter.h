@@ -1,6 +1,6 @@
 #pragma once
 
-#include "core/ReportLine.h"
+#include "StateReportable/core/ReportLine.h"
 
 #include <fstream>
 #include <optional>

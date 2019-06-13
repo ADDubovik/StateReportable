@@ -1,7 +1,7 @@
 #pragma once
 
-#include "core/StateBase.h"
-#include "core/Dispatcher.h"
+#include "StateReportable/core/StateBase.h"
+#include "StateReportable/core/Dispatcher.h"
 #include "Reporter.h"
 
 
