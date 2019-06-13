@@ -8,7 +8,9 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set (BRAND_FULLNAME "StateReportable")
 set (BRAND_COMPANYNAME "ADDubovik")
 
-cmake_policy(SET CMP0074 NEW)
+if (WIN32)
+	cmake_policy(SET CMP0074 NEW)
+endif()
 
 set(CMAKE_INSTALL_PREFIX bin)
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
