@@ -7,6 +7,7 @@
 #include <ostream>
 #include <algorithm>
 #include <iomanip>
+#include <tuple>
 
 
 namespace StateReportable::core

@@ -3,6 +3,7 @@
 #include <ostream>
 #include <string>
 #include <optional>
+#include <tuple>
 
 
 namespace StateReportable::core
