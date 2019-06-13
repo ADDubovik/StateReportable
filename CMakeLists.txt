@@ -20,19 +20,15 @@ include(cmake/projecthelper.cmake)
 
 PRINT_ALL_CMAKE_SETTINGS()
 
-add_subdirectory(src/StateReportable)
+if(WIN32)
+  set(ADDITIONAL_LIBS )
+else()
+  set(ADDITIONAL_LIBS -std=c++17 -lpthread -lstdc++fs)
+endif()
 
 option(BUILD_TESTS "Whether or not to build tests, gtest submodule is required" ON)
 
-if(WIN32)
-  set(ADDITIONAL_LIBS )
-	set(PTHREAD_LIB )
-else()
-	#add_compile_options(-pthread)
-	set(PTHREAD_LIB -lpthread)
-  set(ADDITIONAL_LIBS -std=c++17 -lstdc++fs)
-endif()
-
+add_subdirectory(src/StateReportable)
 
 if (BUILD_TESTS)
 	enable_testing()
