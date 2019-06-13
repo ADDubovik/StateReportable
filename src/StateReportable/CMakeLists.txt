@@ -56,10 +56,12 @@ add_dependencies(
 
 target_link_libraries(${PROJECT_NAME}_toFile_demo
 	${PROJECT_NAME}_lib
+	ADDITIONAL_LIBS
 )
 
 target_link_libraries(${PROJECT_NAME}_toFile_statMaker
 	${PROJECT_NAME}_lib
+	ADDITIONAL_LIBS
 )
 
 set_property(TARGET ${PROJECT_NAME}_lib PROPERTY FOLDER "StateReportable")
