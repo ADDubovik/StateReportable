@@ -40,8 +40,8 @@ namespace StateReportable::core
     StateBase &operator=(const StateBase &) = delete;
     StateBase &operator=(StateBase &&) = default;
 
-    StateBase<State_t, Duration_t> &operator=(const State_t state) { setState(state); return *this; };
-    operator State_t() const { return m_state; };
+    StateBase<State_t, Duration_t> &operator=(const State_t state) { setState(state); return *this; }
+    operator State_t() const { return m_state; }
   private:
     State_t m_state;
     std::chrono::steady_clock::time_point m_timestamp;

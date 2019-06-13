@@ -22,10 +22,10 @@ namespace Namespace_01
   {
     switch (state)
     {
-      case State::non_inintialized: return stream << "non_inintialized"; break;
-      case State::connecting: return stream << "connecting"; break;
-      case State::connected: return stream << "connected"; break;
-      case State::error: return stream << "error"; break;
+      case State::non_inintialized: return stream << "non_inintialized";
+      case State::connecting: return stream << "connecting";
+      case State::connected: return stream << "connected";
+      case State::error: return stream << "error";
       default : return stream << "unknown";
     };
   }
@@ -82,7 +82,7 @@ TEST(StateBaseTest, Test_02)
   
   {
     core::StateBase<Namespace_01::State, std::chrono::milliseconds>
-    state(Namespace_01::State::non_inintialized, [&stream](auto & str) { stream << str << std::endl; });
+    state(Namespace_01::State::non_inintialized, [&stream](auto && str) { stream << str << std::endl; });
 
     std::this_thread::sleep_for(std::chrono::milliseconds(5));
     EXPECT_NO_THROW(state = Namespace_01::State::connecting);
@@ -104,7 +104,7 @@ TEST(StateBaseTest, Test_03)
 
   {
     core::StateBase<Namespace_02::State, std::chrono::milliseconds>
-    state(Namespace_02::State::none, [&stream](auto & str) { stream << str << std::endl; });
+    state(Namespace_02::State::none, [&stream](auto && str) { stream << str << std::endl; });
 
     std::this_thread::sleep_for(std::chrono::milliseconds(5));
     EXPECT_NO_THROW(state = Namespace_02::State::preparing);
