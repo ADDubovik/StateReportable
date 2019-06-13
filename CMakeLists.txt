@@ -25,9 +25,10 @@ add_subdirectory(src/StateReportable)
 option(BUILD_TESTS "Whether or not to build tests, gtest submodule is required" ON)
 
 if(WIN32)
-    set(ADDITIONAL_LIBS )
+  set(ADDITIONAL_LIBS )
 else()
-    set(ADDITIONAL_LIBS -std=c++17 -lstdc++fs -lpthread)
+	add_compile_options(-pthread)
+  set(ADDITIONAL_LIBS -std=c++17 -lstdc++fs -lpthread)
 endif()
 
 
